@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <Company>Axis.io</Company>
+    <Description>An Application for manufactoring is build by Axis</Description>
+    <Copyright>Copyright Axis.io 2022</Copyright>
+    <Product>Axis.io</Product>
+    <AssemblyVersion>7.22.11.10</AssemblyVersion>
+    <InformationalVersion>7.22.11.10</InformationalVersion>
+    <FileVersion>7.22.11.10</FileVersion>
+    <EnableCentralPackageVersions>true</EnableCentralPackageVersions>
+  </PropertyGroup>
+</Project>

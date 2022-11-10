@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{C0BCB510-1E58-41CB-8314-9EB298CD42AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F8C0B6E2-8396-41DB-BDD8-620621560BC2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.App.WebApi", "Apps\Axis.App.WebApi\Axis.App.WebApi.csproj", "{4E026D5B-7E24-4112-A8F2-11B681D53976}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{DC614C75-97B9-41F7-AC40-3808269C2C2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{3A86214D-1577-446D-BB3A-72FF0275244A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{F49288AF-5078-4001-BF7D-62782A5AC914}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugin", "Plugin", "{4D42C776-FC5D-4D8B-9918-572774023DCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ml", "Ml", "{CB362C69-601C-4DCE-B364-79A6404051D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{E9BD4C21-F6FF-4ACC-9552-A6F45CF577B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA960CCD-D59E-4D01-BE7D-167246BB1773}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		favicon.ico = favicon.ico
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E026D5B-7E24-4112-A8F2-11B681D53976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E026D5B-7E24-4112-A8F2-11B681D53976}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E026D5B-7E24-4112-A8F2-11B681D53976}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E026D5B-7E24-4112-A8F2-11B681D53976}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4E026D5B-7E24-4112-A8F2-11B681D53976} = {C0BCB510-1E58-41CB-8314-9EB298CD42AC}
+		{3A86214D-1577-446D-BB3A-72FF0275244A} = {DC614C75-97B9-41F7-AC40-3808269C2C2E}
+		{F49288AF-5078-4001-BF7D-62782A5AC914} = {E9BD4C21-F6FF-4ACC-9552-A6F45CF577B2}
+		{4D42C776-FC5D-4D8B-9918-572774023DCF} = {E9BD4C21-F6FF-4ACC-9552-A6F45CF577B2}
+		{CB362C69-601C-4DCE-B364-79A6404051D9} = {E9BD4C21-F6FF-4ACC-9552-A6F45CF577B2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5ED97765-ED0B-49D3-91B8-A41E665CA11A}
+	EndGlobalSection
+EndGlobal
