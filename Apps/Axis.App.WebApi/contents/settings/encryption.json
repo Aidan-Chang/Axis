@@ -1,0 +1,11 @@
+{
+  "Jwt": {
+    "Key": "VjajaEyIchihVYpHupKaITOFiaCaGuvHvdrapLvEbxgMiavYLQpLFaHyUAgHwaqSQaaliaTcbnNatSmmWBKgRcyb",
+    "Issuer": "axis.io",
+    "Audience": "axis.io"
+  },
+  "Encryption": {
+    "Key": "iamrallywait4you",
+    "Iv": "youarein2myheart"
+  }
+}

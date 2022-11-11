@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<elmah>
+  <errorFilter>
+    <test>
+      <and>
+        <greater binding="HttpStatusCode" value="399" type="Int32" />
+        <lesser  binding="HttpStatusCode" value="500" type="Int32" />
+        <regex binding="Context.Request.ServerVariables['URL']" pattern="^((?!websocket).)*$" />
+      </and>
+    </test>
+  </errorFilter>
+</elmah>

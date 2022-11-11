@@ -1,0 +1,61 @@
+{
+  "Paths": {
+    "Base": "",
+    "Service": "service",
+    "Database": "contents/databases",
+    "Facial": "contents/identities"
+  },
+  "Database": {
+    "Type": "PostgreSql",
+    "NamingConvention": "LowerCase",
+    "Migration": true,
+    "OpeningIdentifier": "\"",
+    "ClosingIdentifier": "\""
+  },
+  "Plugins": {
+    "Path": "contents/plugins",
+    "PreferSharedTypes": true,
+    "IsLazyLoaded": true,
+    "IsUnloadable": true,
+    "EnableHotReload": true
+  },
+  "Swagger": {
+    "v1": {
+      "Title": "Axis",
+      "Version": "v1",
+      "Description": "Axis API"
+    }
+  },
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft.AspNetCore": "Warning"
+      }
+    },
+    "Enrich": [ "FromLogContext" ],
+    "WriteTo": [
+      {
+        "Name": "Console"
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "./contents/logs/.log",
+          "rollingInterval": "Day",
+          "retainedFileCountLimit": 30,
+          "shared": "true",
+          "formatter": "Serilog.Formatting.Compact.CompactJsonFormatter, Serilog.Formatting.Compact"
+        }
+      }
+    ]
+  },
+  "Elmah": {
+    "Email": {
+      "MailSender": "",
+      "MailRecipient": "",
+      "MailSubjectFormat": "",
+      "SmtpServer": ""
+    }
+  }
+}

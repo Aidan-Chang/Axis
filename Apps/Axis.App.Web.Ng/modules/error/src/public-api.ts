@@ -1,1 +1,1 @@
-export * from './lib/error.module';
+export * from './error.module';

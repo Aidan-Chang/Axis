@@ -1,1 +1,1 @@
-export * from './lib/home.module';
+export * from './home.module';
