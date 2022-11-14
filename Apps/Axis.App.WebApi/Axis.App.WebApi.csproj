@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\Axis.Data.Abstraction\Axis.Data.Abstraction.csproj" />
+    <ProjectReference Include="..\..\Libs\Axis.Identity.Abstraction\Axis.Identity.Abstraction.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Task.Abstration\Axis.Web.Task.Abstration.csproj" />
   </ItemGroup>
 
