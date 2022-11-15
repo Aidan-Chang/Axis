@@ -16,7 +16,11 @@ public class TokenAuthorizationHandler : AuthorizationHandler<TokenAuthorization
     if (context.User.HasClaim(c => c.Type == requirement.TokenType)) {
       var user = await _manager.GetUserAsync(context.User);
       var claim = context.User.Claims.FirstOrDefault(x => x.Type == requirement.TokenType);
-      var token = await _manager.GetAuthenticationTokenAsync(user, requirement.TokenProvider, claim!.Value);
+      if (user == null || claim == null) {
+        context.Fail(new(this, "User or Claim is not found"));
+        return;
+      }
+      var token = await _manager.GetAuthenticationTokenAsync(user, requirement.TokenProvider, claim.Value);
       if (token != null) {
         context.Succeed(requirement);
       }

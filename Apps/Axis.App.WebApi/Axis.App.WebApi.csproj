@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
@@ -24,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\Axis.Data.Abstraction\Axis.Data.Abstraction.csproj" />
+    <ProjectReference Include="..\..\Libs\Axis.Data.DatabaseConnection\Axis.Data.DatabaseConnection.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Identity.Abstraction\Axis.Identity.Abstraction.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Task.Abstration\Axis.Web.Task.Abstration.csproj" />
   </ItemGroup>

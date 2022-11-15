@@ -2,7 +2,7 @@
 
 namespace Axis.Identity.Abstraction;
 
-public class TokenAuthorizationRequiremnt: IAuthorizationRequirement {
+public class TokenAuthorizationRequiremnt : IAuthorizationRequirement {
 
   public string TokenProvider { get; set; }
 

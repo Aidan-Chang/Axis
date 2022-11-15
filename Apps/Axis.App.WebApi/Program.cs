@@ -1,4 +1,4 @@
-using Axis.Data.Abstraction;
+using Axis.Data.DatabaseConnection;
 using Axis.Identity.Abstraction;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -13,12 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetBasePath(Path.Combine(builder.Environment.ContentRootPath, "contents", "settings"));
 builder.Configuration.AddJsonFile("environment.json", false, false);
 builder.Configuration.AddJsonFile("encryption.json", false, false);
-builder.Configuration.AddDbConnections(options => {
-  options.Path = Path.Combine(
-    builder.Environment.ContentRootPath,
-    builder.Configuration["Paths:DatabaseFile"] ?? "contents/settings/db"
-  );
-});
+builder.Configuration.AddDbConnections(
+  options => {
+    options.Path = Path.Combine(
+      builder.Environment.ContentRootPath,
+      builder.Configuration["Paths:DatabaseFile"] ?? "contents/settings/db"
+    );
+  });
 
 // Add serilog log service
 builder.Host.UseSerilog((context, provider, config)
@@ -29,29 +30,32 @@ builder.Services.AddLogging();
 
 // Add authentication
 builder.Services
-  .AddAuthentication(options => {
-    options.DefaultScheme = "Bearer";
-    options.DefaultChallengeScheme = "Bearer";
-  })
-  .AddJwtBearer(options => {
-    options.IncludeErrorDetails = true;
-    options.TokenValidationParameters = new TokenValidationParameters {
-      NameClaimType = "username",
-      ValidIssuer = builder.Configuration["Jwt:Issuer"],
-      ValidAudience = builder.Configuration["Jwt:Audience"],
-      IssuerSigningKey = new SymmetricSecurityKey(
-        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty))
-    };
-  });
+  .AddAuthentication(
+    options => {
+      options.DefaultScheme = "Bearer";
+      options.DefaultChallengeScheme = "Bearer";
+    })
+  .AddJwtBearer(
+    options => {
+      options.IncludeErrorDetails = true;
+      options.TokenValidationParameters = new TokenValidationParameters {
+        NameClaimType = "username",
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+          System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty))
+      };
+    });
 
 // Add authorization
-builder.Services.AddAuthorization(options => {
-  AuthorizationPolicyBuilder policy = new("Bearer");
-  policy.RequireAuthenticatedUser();
-  policy.RequireClaim("jti");
-  policy.AddRequirements(new TokenAuthorizationRequiremnt());
-  options.DefaultPolicy = policy.Build();
-});
+builder.Services.AddAuthorization(options
+  => {
+    AuthorizationPolicyBuilder policy = new("Bearer");
+    policy.RequireAuthenticatedUser();
+    policy.RequireClaim("jti");
+    policy.AddRequirements(new TokenAuthorizationRequiremnt());
+    options.DefaultPolicy = policy.Build();
+  });
 // Block the logged out token
 builder.Services.AddScoped<IAuthorizationHandler, TokenAuthorizationHandler>();
 
@@ -60,25 +64,29 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add Cors
-builder.Services.AddCors(options => {
-  options.AddPolicy("default", policy => {
-    policy
-      .WithOrigins("*")
-      .AllowAnyOrigin()
-      .AllowAnyMethod()
-      .AllowAnyHeader();
+builder.Services.AddCors(
+  options => {
+    options.AddPolicy("default",
+      policy => {
+        policy
+          .WithOrigins("*")
+          .AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader();
+      });
   });
-});
 
 // Add Hangfire
 builder.Services
-  .AddHangfire(options => {
-    options.UsePostgreSqlStorage(builder.Configuration.GetConnectionString("default"));
-  })
-  .AddHangfireServer(options => {
-    options.WorkerCount = Environment.ProcessorCount;
-    options.Queues = new[] { builder.Environment.EnvironmentName };
-  });
+  .AddHangfire(
+    options => {
+      options.UsePostgreSqlStorage(builder.Configuration.GetConnectionString("default"));
+    })
+  .AddHangfireServer(
+    options => {
+      options.WorkerCount = Environment.ProcessorCount;
+      options.Queues = new[] { builder.Environment.EnvironmentName };
+    });
 
 // Add context accessor
 builder.Services.AddHttpContextAccessor();
@@ -87,7 +95,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
 
 // Add exception filter
-builder.Services.
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Add mediatr
@@ -97,13 +104,17 @@ builder.Services.AddMediatR(System.Reflection.Assembly.GetExecutingAssembly());
 builder.Services.AddHealthChecks();
 
 // Add spa static files
-builder.Services.AddSpaStaticFiles(options => options.RootPath = "ClientApp/dist");
+builder.Services.AddSpaStaticFiles(
+  options => {
+    options.RootPath = "ClientApp/dist";
+  });
 
 // Add controller
 builder.Services
-  .AddControllers(options => {
-    options.Filters.Add<ActionResulttHandler>();
-  })
+  .AddControllers(
+    options => {
+      options.Filters.Add<ActionResulttHandler>();
+    })
   .AddPlugins();
 
 var app = builder.Build();

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Axis.Message.Abstraction\Axis.Message.Abstraction.csproj" />
+  </ItemGroup>
+
 </Project>
