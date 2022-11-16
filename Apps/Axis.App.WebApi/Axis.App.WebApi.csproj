@@ -27,6 +27,8 @@
     <ProjectReference Include="..\..\Libs\Axis.Data.Abstraction\Axis.Data.Abstraction.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Data.DatabaseConnection\Axis.Data.DatabaseConnection.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Identity.Abstraction\Axis.Identity.Abstraction.csproj" />
+    <ProjectReference Include="..\..\Libs\Axis.Web.Abstraction\Axis.Web.Abstraction.csproj" />
+    <ProjectReference Include="..\..\Libs\Axis.Web.Extension\Axis.Web.Extension.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Task.Abstration\Axis.Web.Task.Abstration.csproj" />
   </ItemGroup>
 

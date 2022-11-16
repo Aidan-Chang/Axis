@@ -1,5 +1,6 @@
 using Axis.Data.DatabaseConnection;
 using Axis.Identity.Abstraction;
+using Axis.Web.Extension.Handlers;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authorization;
@@ -113,7 +114,7 @@ builder.Services.AddSpaStaticFiles(
 builder.Services
   .AddControllers(
     options => {
-      options.Filters.Add<ActionResulttHandler>();
+      options.Filters.Add<ActionResultHandler>();
     })
   .AddPlugins();
 
@@ -124,6 +125,9 @@ if (app.Environment.IsDevelopment()) {
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+// exception
+app.UseExceptionResultHandler();
 
 app.UseHttpsRedirection();
 
