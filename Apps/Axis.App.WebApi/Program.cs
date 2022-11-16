@@ -1,9 +1,12 @@
 using Axis.Data.DatabaseConnection;
-using Axis.Identity.Abstraction;
+using Axis.Identity.Authencation.Jwt;
+using Axis.Web.Extension.Common.Handlers;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Npgsql;
 using Serilog;
 using Serilog.Extensions.Logging;
 
@@ -50,7 +53,7 @@ builder.Services
 // Add authorization
 builder.Services.AddAuthorization(options
   => {
-    AuthorizationPolicyBuilder policy = new("Bearer");
+    AuthorizationPolicyBuilder policy = new("Jwt");
     policy.RequireAuthenticatedUser();
     policy.RequireClaim("jti");
     policy.AddRequirements(new TokenAuthorizationRequiremnt());
@@ -61,7 +64,31 @@ builder.Services.AddScoped<IAuthorizationHandler, TokenAuthorizationHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(
+  options => {
+    options.AddSecurityDefinition("Bearer", new() {
+      Name = "Authorization",
+      Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+      Type = SecuritySchemeType.ApiKey,
+      In = ParameterLocation.Header,
+      Scheme = "Bearer",
+    });
+    options.AddSecurityRequirement(new() { {
+      new OpenApiSecurityScheme {
+        Name = "Bearer",
+        In = ParameterLocation.Header,
+        Reference = new() {
+          Id = "Bearer",
+          Type = ReferenceType.SecurityScheme,
+        }
+      },
+      new List<string>() }
+    });
+    options.SwaggerDoc(
+      "v1",
+      builder.Configuration.GetSection("Swagger:v1").Get<OpenApiInfo>()
+      );
+  });
 
 // Add Cors
 builder.Services.AddCors(
@@ -75,6 +102,24 @@ builder.Services.AddCors(
           .AllowAnyHeader();
       });
   });
+
+// Add query factory
+builder.Services.AddScoped(provider =>
+  new QueryFactory(
+    new ProfiledDbConnection(
+      new NpgsqlConnection(builder.Configuration.GetConnectionString("default")), MiniProfiler.Current))
+);
+builder.Services.AddSingleton<Func<QueryFactory>>(
+  provider => () => provider.CreateScope().ServiceProvider.GetRequiredService<QueryFactory>());
+
+// Add db context builder
+builder.Services.AddSingleton(provider =>
+  new Action<DbContextOptionsBuilder>(options => {
+    options.EnableSensitiveDataLogging();
+    options.UseLoggerFactory(new SerilogLoggerFactory());
+    options.UseNpgsql(builder.Configuration.GetConnectionString("default"), x => x.MigrationsHistoryTable("migrations", "app"));
+    options.UseNamingConvention(name: builder.Configuration["NamingConvention"] ?? "LowerCase");
+  }));
 
 // Add Hangfire
 builder.Services
@@ -113,22 +158,76 @@ builder.Services.AddSpaStaticFiles(
 builder.Services
   .AddControllers(
     options => {
-      options.Filters.Add<ActionResulttHandler>();
+      options.Filters.Add<ActionResultHandler>();
     })
   .AddPlugins();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
-  app.UseSwagger();
-  app.UseSwaggerUI();
+
+// apply swagger
+app.UseSwagger(options => {
+  options.RouteTemplate = $"{app.Configuration["Paths:Service"]}/api/doc/{{documentName}}.{{json|yaml}}";
+});
+app.UseSwaggerUI(options => {
+  options.RoutePrefix = $"{app.Configuration["Paths:Service"]}/api";
+  options.SwaggerEndpoint($"doc/v1.json", "v1");
+});
+
+// apply log request to serilog
+app.UseSerilogRequestLogging();
+
+// apply exception
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging()) {
+  app.UseDeveloperExceptionPage();
+  //app.UseElmahExceptionPage();
+  app.UseMigrationsEndPoint();
 }
+app.UseExceptionResultHandler();
 
+// apply to force https redirection
 app.UseHttpsRedirection();
+//app.UseHsts();
 
+// apply cors
+app.UseCors("default");
+
+// apply static files
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+// apply rabbit message queue
+app.UseRabbitMq(options => { });
+
+// apply authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+// apply plugins
+app.UsePlugins();
+
+// endpoints
+app.UseEndpoints(endpoints => {
+  endpoints.MapControllers();
+  endpoints.MapHub<MessageHub>($"/{app.Configuration["Paths:Service"]}/message");
+  endpoints.MapProgressProfiler($"/{app.Configuration["Paths:Service"]}/progress");
+  endpoints.MapHangfireDashboard($"/{app.Configuration["Paths:Service"]}/work",
+    new DashboardOptions {
+      AppPath = null,
+      DisplayStorageConnectionString = false,
+      DashboardTitle = "Task Dashboard",
+      Authorization = new[] { new HangfireAuthorizeFilter() },
+      IsReadOnlyFunc = (content) => content.IsReadOnly("admins"),
+    });
+  endpoints.MapHealthChecks($"/{app.Configuration["Paths:Service"]}/healthz");
+});
+
+// spa
+app.UseSpa(options => {
+  options.Options.SourcePath = "ClientApp";
+  if (app.Environment.IsDevelopment())
+    options.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+});
 
 app.Run();
