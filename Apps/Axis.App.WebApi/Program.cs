@@ -1,5 +1,6 @@
 using Axis.Data.Database.Connection;
 using Axis.Identity.Authencation.Jwt;
+using Axis.Message.RabbitMq;
 using Axis.Message.SignalR.Hubs;
 using Axis.Web.Extension.Common.Handlers;
 using Axis.Web.Extension.Worker.Filters;
@@ -207,7 +208,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // apply rabbit message queue
-//app.UseRabbitMq(options => { });
+app.UseRabbitMq(options => { });
 
 // apply authorization
 app.UseAuthentication();
