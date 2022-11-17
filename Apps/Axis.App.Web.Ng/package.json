@@ -1,6 +1,6 @@
 {
   "name": "axis.web.ng",
-  "version": "14.22.11.10",
+  "version": "15.22.11.10",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
