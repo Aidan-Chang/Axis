@@ -58,25 +58,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Ml.Test", "Tests\Axis.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.DatabaseConnection", "Libs\Axis.Data.DatabaseConnection\Axis.Data.DatabaseConnection.csproj", "{1E21E8F9-62A0-4DFB-BEBE-1335F67CA98E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Web.Extension.Abstraction", "Libs\Axis.Web.Extension.Abstraction\Axis.Web.Extension.Abstraction.csproj", "{509579EA-6F8F-433F-8B93-C8EB1CAC59D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Web.Extension.Abstraction", "Libs\Axis.Web.Extension.Abstraction\Axis.Web.Extension.Abstraction.csproj", "{509579EA-6F8F-433F-8B93-C8EB1CAC59D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Web.Extension.Common", "Libs\Axis.Web.Extension.Common\Axis.Web.Extension.Common.csproj", "{849697AB-282E-4396-89E0-59783A23B201}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Web.Extension.Common", "Libs\Axis.Web.Extension.Common\Axis.Web.Extension.Common.csproj", "{849697AB-282E-4396-89E0-59783A23B201}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Web.Extension.Worker", "Libs\Axis.Web.Extension.Worker\Axis.Web.Extension.Worker.csproj", "{9DA33A0C-2B99-4DD9-A7AD-F3F30CE02874}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Web.Extension.Worker", "Libs\Axis.Web.Extension.Worker\Axis.Web.Extension.Worker.csproj", "{9DA33A0C-2B99-4DD9-A7AD-F3F30CE02874}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Ml.Abstraction", "Libs\Axis.Ml.Abstraction\Axis.Ml.Abstraction.csproj", "{14BFC621-FD9B-42C1-9486-07BE83E20C32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Ml.Abstraction", "Libs\Axis.Ml.Abstraction\Axis.Ml.Abstraction.csproj", "{14BFC621-FD9B-42C1-9486-07BE83E20C32}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{4D609E60-D25E-4D02-80AF-5C99DF5A978E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Module.App.Management", "Modules\Axis.Module.App.Management\Axis.Module.App.Management.csproj", "{8B46B8CF-9AD5-4396-98EC-F0C9F9E973F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Module.App.Management", "Modules\Axis.Module.App.Management\Axis.Module.App.Management.csproj", "{8B46B8CF-9AD5-4396-98EC-F0C9F9E973F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Module.App.Common", "Modules\Axis.Module.App.Common\Axis.Module.App.Common.csproj", "{5265B75F-4229-4B9F-B903-C018F468A833}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Module.App.Common", "Modules\Axis.Module.App.Common\Axis.Module.App.Common.csproj", "{5265B75F-4229-4B9F-B903-C018F468A833}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Identity.Common", "Libs\Axis.Identity.Common\Axis.Identity.Common.csproj", "{46951854-A705-43E8-ACE5-83ECDCEA6E14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Identity.Common", "Libs\Axis.Identity.Common\Axis.Identity.Common.csproj", "{46951854-A705-43E8-ACE5-83ECDCEA6E14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Identity.Authencation.Jwt", "Libs\Axis.Identity.Authencation.Jwt\Axis.Identity.Authencation.Jwt.csproj", "{8C42AAA0-F641-4D3B-9A07-8860D23F0FE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Identity.Authencation.Jwt", "Libs\Axis.Identity.Authencation.Jwt\Axis.Identity.Authencation.Jwt.csproj", "{8C42AAA0-F641-4D3B-9A07-8860D23F0FE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Ml.FacialRecognition", "Libs\Axis.Ml.FacialRecognition\Axis.Ml.FacialRecognition.csproj", "{148501A8-277E-4872-AB19-15CC9A5A7270}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Ml.FacialRecognition", "Libs\Axis.Ml.FacialRecognition\Axis.Ml.FacialRecognition.csproj", "{148501A8-277E-4872-AB19-15CC9A5A7270}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Data.Provider.EntityFramework", "Libs\Axis.Data.Provider.EntityFramework\Axis.Data.Provider.EntityFramework.csproj", "{CDED042B-8368-4188-9225-BC988DC959A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -164,6 +166,10 @@ Global
 		{148501A8-277E-4872-AB19-15CC9A5A7270}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{148501A8-277E-4872-AB19-15CC9A5A7270}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{148501A8-277E-4872-AB19-15CC9A5A7270}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDED042B-8368-4188-9225-BC988DC959A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDED042B-8368-4188-9225-BC988DC959A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDED042B-8368-4188-9225-BC988DC959A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDED042B-8368-4188-9225-BC988DC959A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,6 +203,7 @@ Global
 		{46951854-A705-43E8-ACE5-83ECDCEA6E14} = {4B4456C6-33A9-46C8-AA88-7D56B0B496BC}
 		{8C42AAA0-F641-4D3B-9A07-8860D23F0FE4} = {4B4456C6-33A9-46C8-AA88-7D56B0B496BC}
 		{148501A8-277E-4872-AB19-15CC9A5A7270} = {CB362C69-601C-4DCE-B364-79A6404051D9}
+		{CDED042B-8368-4188-9225-BC988DC959A4} = {F49288AF-5078-4001-BF7D-62782A5AC914}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5ED97765-ED0B-49D3-91B8-A41E665CA11A}

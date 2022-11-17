@@ -33,7 +33,7 @@ public class DatabaseConnectionLoaderProvider : ConfigurationProvider, IConfigur
         string.IsNullOrEmpty(options.ConnectionName) == false &&
         string.IsNullOrEmpty(options.ConnectionString) == false) {
         string key = $"ConnectionStrings:{options.ConnectionName}";
-        string value = DataUtil.AesDecrypt(options.ConnectionString, options.ConnectionName, options.DatabaseName ?? string.Empty);
+        string value = DataUtility.AesDecrypt(options.ConnectionString, options.ConnectionName, options.DatabaseName ?? string.Empty);
         if (connection_strings.ContainsKey(key) == false) {
           connection_strings.Add(key, value);
         }
@@ -47,7 +47,7 @@ public class DatabaseConnectionLoaderProvider : ConfigurationProvider, IConfigur
   }
 
   private DatabaseOptions? resolve(FileInfo file) {
-    string text = DataUtil.GzDecompress(file);
+    string text = DataUtility.GzDecompress(file);
     DatabaseOptions? options = JsonSerializer.Deserialize<DatabaseOptions>(text);
     return options;
   }

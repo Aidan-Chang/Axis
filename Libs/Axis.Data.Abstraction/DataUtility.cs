@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Axis.Data.Abstraction;
 
-public static class DataUtil {
+public static class DataUtility {
 
   /// <summary>
   /// Aes Encrypt
