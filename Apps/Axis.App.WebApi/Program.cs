@@ -104,22 +104,25 @@ builder.Services.AddCors(
   });
 
 // Add query factory
-builder.Services.AddScoped(provider =>
-  new QueryFactory(
-    new ProfiledDbConnection(
-      new NpgsqlConnection(builder.Configuration.GetConnectionString("default")), MiniProfiler.Current))
+builder.Services.AddScoped(
+  provider =>
+    new QueryFactory(
+      new ProfiledDbConnection(
+        new NpgsqlConnection(builder.Configuration.GetConnectionString("default")), MiniProfiler.Current))
 );
 builder.Services.AddSingleton<Func<QueryFactory>>(
   provider => () => provider.CreateScope().ServiceProvider.GetRequiredService<QueryFactory>());
 
 // Add db context builder
-builder.Services.AddSingleton(provider =>
-  new Action<DbContextOptionsBuilder>(options => {
-    options.EnableSensitiveDataLogging();
-    options.UseLoggerFactory(new SerilogLoggerFactory());
-    options.UseNpgsql(builder.Configuration.GetConnectionString("default"), x => x.MigrationsHistoryTable("migrations", "app"));
-    options.UseNamingConvention(name: builder.Configuration["NamingConvention"] ?? "LowerCase");
-  }));
+builder.Services.AddSingleton(
+  provider =>
+    new Action<DbContextOptionsBuilder>(
+      options => {
+        options.EnableSensitiveDataLogging();
+        options.UseLoggerFactory(new SerilogLoggerFactory());
+        options.UseNpgsql(builder.Configuration.GetConnectionString("default"), x => x.MigrationsHistoryTable("migrations", "app"));
+        options.UseNamingConvention(name: builder.Configuration["NamingConvention"] ?? "LowerCase");
+      }));
 
 // Add Hangfire
 builder.Services
