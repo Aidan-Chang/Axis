@@ -78,7 +78,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Identity.Authencation.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Ml.FacialRecognition", "Libs\Axis.Ml.FacialRecognition\Axis.Ml.FacialRecognition.csproj", "{148501A8-277E-4872-AB19-15CC9A5A7270}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Data.Provider.EntityFramework", "Libs\Axis.Data.Provider.EntityFramework\Axis.Data.Provider.EntityFramework.csproj", "{CDED042B-8368-4188-9225-BC988DC959A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.Provider.EntityFramework", "Libs\Axis.Data.Provider.EntityFramework\Axis.Data.Provider.EntityFramework.csproj", "{CDED042B-8368-4188-9225-BC988DC959A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Web.Extension.Profiler", "Libs\Axis.Web.Extension.Profiler\Axis.Web.Extension.Profiler.csproj", "{C17B7661-C9C5-419B-B5C2-95B94E9C1C0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -170,6 +172,10 @@ Global
 		{CDED042B-8368-4188-9225-BC988DC959A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDED042B-8368-4188-9225-BC988DC959A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDED042B-8368-4188-9225-BC988DC959A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C17B7661-C9C5-419B-B5C2-95B94E9C1C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C17B7661-C9C5-419B-B5C2-95B94E9C1C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C17B7661-C9C5-419B-B5C2-95B94E9C1C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C17B7661-C9C5-419B-B5C2-95B94E9C1C0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,6 +210,7 @@ Global
 		{8C42AAA0-F641-4D3B-9A07-8860D23F0FE4} = {4B4456C6-33A9-46C8-AA88-7D56B0B496BC}
 		{148501A8-277E-4872-AB19-15CC9A5A7270} = {CB362C69-601C-4DCE-B364-79A6404051D9}
 		{CDED042B-8368-4188-9225-BC988DC959A4} = {F49288AF-5078-4001-BF7D-62782A5AC914}
+		{C17B7661-C9C5-419B-B5C2-95B94E9C1C0E} = {5E39AA6C-DA54-46DC-B2F1-6B6F516B7CE2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5ED97765-ED0B-49D3-91B8-A41E665CA11A}
