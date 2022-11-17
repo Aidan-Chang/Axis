@@ -25,11 +25,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\Axis.Data.Abstraction\Axis.Data.Abstraction.csproj" />
-    <ProjectReference Include="..\..\Libs\Axis.Data.DatabaseConnection\Axis.Data.DatabaseConnection.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Data.Provider.EntityFramework\Axis.Data.Provider.EntityFramework.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Data.SqlBuilder\Axis.Data.SqlBuilder.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Identity.Abstraction\Axis.Identity.Abstraction.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Identity.Authencation.Jwt\Axis.Identity.Authencation.Jwt.csproj" />
+    <ProjectReference Include="..\..\Libs\Axis.Message.SignalR\Axis.Message.SignalR.csproj" />
+    <ProjectReference Include="..\..\Libs\Axis.Plugin.Abstractin\Axis.Plugin.Abstractin.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Extension.Common\Axis.Web.Extension.Common.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Extension.Worker\Axis.Web.Extension.Worker.csproj" />
   </ItemGroup>

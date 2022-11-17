@@ -1,8 +1,11 @@
-using Axis.Data.DatabaseConnection;
+using Axis.Data.Database.Connection;
 using Axis.Identity.Authencation.Jwt;
+using Axis.Message.SignalR.Hubs;
 using Axis.Web.Extension.Common.Handlers;
+using Axis.Web.Extension.Worker.Filters;
 using Hangfire;
 using Hangfire.PostgreSql;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -171,13 +174,15 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 // apply swagger
-app.UseSwagger(options => {
-  options.RouteTemplate = $"{app.Configuration["Paths:Service"]}/api/doc/{{documentName}}.{{json|yaml}}";
-});
-app.UseSwaggerUI(options => {
-  options.RoutePrefix = $"{app.Configuration["Paths:Service"]}/api";
-  options.SwaggerEndpoint($"doc/v1.json", "v1");
-});
+app.UseSwagger(
+  options => {
+    options.RouteTemplate = $"{app.Configuration["Paths:Service"]}/api/doc/{{documentName}}.{{json|yaml}}";
+  });
+app.UseSwaggerUI(
+  options => {
+    options.RoutePrefix = $"{app.Configuration["Paths:Service"]}/api";
+    options.SwaggerEndpoint($"doc/v1.json", "v1");
+  });
 
 // apply log request to serilog
 app.UseSerilogRequestLogging();
@@ -202,7 +207,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // apply rabbit message queue
-app.UseRabbitMq(options => { });
+//app.UseRabbitMq(options => { });
 
 // apply authorization
 app.UseAuthentication();
@@ -212,26 +217,25 @@ app.UseAuthorization();
 app.UsePlugins();
 
 // endpoints
-app.UseEndpoints(endpoints => {
-  endpoints.MapControllers();
-  endpoints.MapHub<MessageHub>($"/{app.Configuration["Paths:Service"]}/message");
-  endpoints.MapProgressProfiler($"/{app.Configuration["Paths:Service"]}/progress");
-  endpoints.MapHangfireDashboard($"/{app.Configuration["Paths:Service"]}/work",
-    new DashboardOptions {
-      AppPath = null,
-      DisplayStorageConnectionString = false,
-      DashboardTitle = "Task Dashboard",
-      Authorization = new[] { new HangfireAuthorizeFilter() },
-      IsReadOnlyFunc = (content) => content.IsReadOnly("admins"),
-    });
-  endpoints.MapHealthChecks($"/{app.Configuration["Paths:Service"]}/healthz");
-});
+app.MapControllers();
+app.MapHub<MessageHub>($"/{app.Configuration["Paths:Service"] ?? "services"}/message");
+app.MapHub<ProgressHub>($"/{app.Configuration["Paths:Service"] ?? "services"}/progress");
+app.MapHealthChecks($"/{app.Configuration["Paths:Service"]}/healthz");
+app.MapHangfireDashboard($"/{app.Configuration["Paths:Service"] ?? "services"}/worker",
+  new DashboardOptions {
+    AppPath = null,
+    DisplayStorageConnectionString = false,
+    DashboardTitle = "Task Dashboard",
+    Authorization = new[] { new HangfireAuthorizeFilter() },
+    IsReadOnlyFunc = (content) => content.IsReadOnly("admins"),
+  });
 
 // spa
-app.UseSpa(options => {
-  options.Options.SourcePath = "ClientApp";
-  if (app.Environment.IsDevelopment())
-    options.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-});
+app.UseSpa(
+  options => {
+    options.Options.SourcePath = "ClientApp";
+    if (app.Environment.IsDevelopment())
+      options.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+  });
 
 app.Run();
