@@ -1,4 +1,4 @@
-﻿namespace Axis.Data.Database.Connection;
+﻿namespace Axis.Data.Database.Configuration;
 
 public class DatabaseConnectionLoaderOptions {
 

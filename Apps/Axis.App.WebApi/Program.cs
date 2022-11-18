@@ -1,4 +1,5 @@
-using Axis.Data.Database.Connection;
+using Axis.Data.Database.Configuration;
+using Axis.Data.SqlBuilder.Execution;
 using Axis.Identity.Authencation.Jwt;
 using Axis.Message.RabbitMq;
 using Axis.Message.SignalR.Hubs;
@@ -113,12 +114,11 @@ builder.Services.AddScoped(
   provider =>
     new QueryFactory(
       new ProfiledDbConnection(
-        new NpgsqlConnection(builder.Configuration.GetConnectionString("default")), MiniProfiler.Current))
-);
+        new NpgsqlConnection(builder.Configuration.GetConnectionString("default")), MiniProfiler.Current)));
 builder.Services.AddSingleton<Func<QueryFactory>>(
   provider => () => provider.CreateScope().ServiceProvider.GetRequiredService<QueryFactory>());
 
-// Add db context builder
+// Add database context builder
 builder.Services.AddSingleton(
   provider =>
     new Action<DbContextOptionsBuilder>(

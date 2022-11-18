@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 
-namespace Axis.Data.Database.Connection;
+namespace Axis.Data.Database.Configuration;
 
 public class DatabaseConnectionLoaderProvider : ConfigurationProvider, IConfigurationSource {
 

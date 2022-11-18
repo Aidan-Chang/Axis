@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Axis.Data.Database.Connection;
+namespace Axis.Data.Database.Configuration;
 
 public static class DatabaseConnectionLoader {
 
