@@ -25,30 +25,20 @@ public class QueryFactory : IDisposable {
   public QueryFactory(IDbConnection connection, Compiler? compiler = null, int timeout = 30) {
     Connection = connection;
     if (compiler == null) {
-      switch (connection.GetType().Name) {
-        case "NpgsqlConnection":
-          Compiler = new PostgresCompiler();
-          break;
-        case "SqlConnection":
-          Compiler = new SqlServerCompiler();
-          break;
-        case "MySqlConnection":
-          Compiler = new MySqlCompiler();
-          break;
-        case "ProfiledDbConnection":
-          if (connection.GetType().GetProperty("WrappedConnection")?.GetValue(connection) is IDbConnection wrappedConnection) {
-            compiler = wrappedConnection.GetType().Name switch {
-              "NpgsqlConnection" => new PostgresCompiler(),
-              "SqlConnection" => new SqlServerCompiler(),
-              "MySqlConnection" => new MySqlCompiler(),
-              _ => throw new InvalidExpressionException($"Databast connection type \"{wrappedConnection.GetType().Name}\" is not supported"),
-            };
-          }
-          break;
+      if (connection.GetType().GetProperty("WrappedConnection")?.GetValue(connection) is IDbConnection wrappedConnection) {
+        connection = wrappedConnection;
       }
+      compiler = connection.GetType().Name switch {
+        "NpgsqlConnection" => new PostgresCompiler(),
+        "SqlConnection" => new SqlServerCompiler(),
+        "MySqlConnection" => new MySqlCompiler(),
+        _ => throw new NotSupportedException($"Databast connection type \"{connection.GetType().Name}\" is not supported"),
+      };
+      Compiler = compiler;
     }
-    else
-      Compiler = compiler!;
+    else {
+      Compiler = compiler;
+    }
     QueryTimeout = timeout;
   }
 
@@ -345,18 +335,20 @@ public class QueryFactory : IDisposable {
   }
 
   public PaginationResult<T> Paginate<T>(Query query, int skip, int size = 25, IDbTransaction? transaction = null, int? timeout = null) {
-    if (skip < 0)
+    if (skip < 0) {
       throw new ArgumentException("Skip param should be greater than or equal to 0", nameof(skip));
-    if (size < 1)
+    }
+    if (size < 1) {
       throw new ArgumentException("Size param should be greater than or equal to 1", nameof(size));
-
+    }
     var count = Count<long>(query.Clone(), null, transaction, timeout);
     IEnumerable<T> list;
-    if (count > 0)
+    if (count > 0) {
       list = Get<T>(query.Clone().ForPage(skip, size), transaction, timeout);
-    else
+    }
+    else {
       list = Enumerable.Empty<T>();
-
+    }
     return new PaginationResult<T> {
       Query = query,
       Size = size,
@@ -367,18 +359,20 @@ public class QueryFactory : IDisposable {
   }
 
   public async Task<PaginationResult<T>> PaginateAsync<T>(Query query, int skip, int size = 25, IDbTransaction? transaction = null, int? timeout = null, CancellationToken cancellationToken = default) {
-    if (skip < 0)
+    if (skip < 0) {
       throw new ArgumentException("Skip param should be greater than or equal to 0", nameof(skip));
-    if (size < 1)
+    }
+    if (size < 1) {
       throw new ArgumentException("Size param should be greater than or equal to 1", nameof(size));
-
+    }
     var count = await CountAsync<long>(query.Clone(), null, transaction, timeout, cancellationToken);
     IEnumerable<T> list;
-    if (count > 0)
+    if (count > 0) {
       list = await GetAsync<T>(query.Clone().ForPage(skip, size), transaction, timeout, cancellationToken);
-    else
+    }
+    else {
       list = Enumerable.Empty<T>();
-
+    }
     return new PaginationResult<T> {
       Query = query,
       Size = size,
@@ -520,20 +514,20 @@ public class QueryFactory : IDisposable {
       include.ForeignKey ??= include.Name + "Id";
 
       var foreignIds = dynamicResult
-          .Where(x => x[include.ForeignKey] != null)
-          .Select(x => x[include.ForeignKey].ToString())
-          .ToList();
+        .Where(x => x[include.ForeignKey] != null)
+        .Select(x => x[include.ForeignKey].ToString())
+        .ToList();
 
       if (!foreignIds.Any()) {
         continue;
       }
       var related = include
-          .Query
-          .WhereIn(include.LocalKey, foreignIds)
-          .Get()
-          .Cast<IDictionary<string, object>>()
-          .Select(x => new Dictionary<string, object>(x, StringComparer.OrdinalIgnoreCase))
-          .ToDictionary(x => x[include.LocalKey].ToString()!);
+        .Query
+        .WhereIn(include.LocalKey, foreignIds)
+        .Get()
+        .Cast<IDictionary<string, object>>()
+        .Select(x => new Dictionary<string, object>(x, StringComparer.OrdinalIgnoreCase))
+        .ToDictionary(x => x[include.LocalKey].ToString()!);
 
       foreach (var item in dynamicResult) {
         var foreignValue = item[include.ForeignKey]?.ToString();

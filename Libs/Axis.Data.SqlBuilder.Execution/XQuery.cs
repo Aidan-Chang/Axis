@@ -21,8 +21,7 @@ public class XQuery : Query {
 
   public override Query Clone() {
     var query = new XQuery(QueryFactory.Connection, QueryFactory.Compiler);
-    if (QueryFactory?.QueryTimeout != null)
-      query.QueryFactory.QueryTimeout = QueryFactory?.QueryTimeout ?? 30;
+    query.QueryFactory.QueryTimeout = QueryFactory?.QueryTimeout ?? 30;
     query.Clauses = this.Clauses.Select(x => x.Clone()).ToList();
     query.Logger = Logger;
     query.QueryAlias = QueryAlias;

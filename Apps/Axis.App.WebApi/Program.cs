@@ -15,6 +15,8 @@ using Microsoft.OpenApi.Models;
 using Npgsql;
 using Serilog;
 using Serilog.Extensions.Logging;
+using StackExchange.Profiling;
+using StackExchange.Profiling.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -112,9 +114,7 @@ builder.Services.AddCors(
 // Add query factory
 builder.Services.AddScoped(
   provider =>
-    new QueryFactory(
-      new ProfiledDbConnection(
-        new NpgsqlConnection(builder.Configuration.GetConnectionString("default")), MiniProfiler.Current)));
+    new QueryFactory());
 builder.Services.AddSingleton<Func<QueryFactory>>(
   provider => () => provider.CreateScope().ServiceProvider.GetRequiredService<QueryFactory>());
 

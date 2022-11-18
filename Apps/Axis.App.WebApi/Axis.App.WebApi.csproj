@@ -34,6 +34,7 @@
     <ProjectReference Include="..\..\Libs\Axis.Message.SignalR\Axis.Message.SignalR.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Plugin.Abstractin\Axis.Plugin.Abstractin.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Extension.Common\Axis.Web.Extension.Common.csproj" />
+    <ProjectReference Include="..\..\Libs\Axis.Web.Extension.Profiler\Axis.Web.Extension.Profiler.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Extension.Worker\Axis.Web.Extension.Worker.csproj" />
   </ItemGroup>
 

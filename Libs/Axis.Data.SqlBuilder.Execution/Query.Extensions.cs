@@ -268,23 +268,26 @@ public static class QueryExtensions {
     if (query is not XQuery xQuery) {
       if (method == null) {
         throw new InvalidOperationException(
-            $"Execution methods can only be used with `{nameof(XQuery)}` instances, " +
-            $"consider using the `{nameof(QueryFactory)}.{nameof(QueryFactory.Query)}()` to create executable queries, " +
-            $"check https://sqlkata.com/docs/execution/setup#xquery-class for more info");
-      }
-      throw new InvalidOperationException($"The method '{method}()' can only be used with `{nameof(XQuery)}` instances, " +
+          $"Execution methods can only be used with `{nameof(XQuery)}` instances, " +
           $"consider using the `{nameof(QueryFactory)}.{nameof(QueryFactory.Query)}()` to create executable queries, " +
           $"check https://sqlkata.com/docs/execution/setup#xquery-class for more info");
+      }
+      throw new InvalidOperationException(
+        $"The method '{method}()' can only be used with `{nameof(XQuery)}` instances, " +
+        $"consider using the `{nameof(QueryFactory)}.{nameof(QueryFactory.Query)}()` to create executable queries, " +
+        $"check https://sqlkata.com/docs/execution/setup#xquery-class for more info");
     }
     return xQuery;
   }
 
   internal static QueryFactory CreateQueryFactory(XQuery xQuery) {
     QueryFactory factory;
-    if (xQuery.QueryFactory != null)
+    if (xQuery.QueryFactory != null) {
       factory = new QueryFactory(xQuery.Connection, xQuery.Compiler, xQuery.QueryFactory.QueryTimeout);
-    else
+    }
+    else {
       factory = new QueryFactory(xQuery.Connection, xQuery.Compiler);
+    }
     factory.Logger = xQuery.Logger;
     return factory;
   }

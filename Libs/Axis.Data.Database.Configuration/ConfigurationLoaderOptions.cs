@@ -2,6 +2,6 @@
 
 public class DatabaseConnectionLoaderOptions {
 
-    public string? Path { get; set; }
+  public string? Path { get; set; }
 
 }
