@@ -12,11 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Npgsql;
 using Serilog;
 using Serilog.Extensions.Logging;
-using StackExchange.Profiling;
-using StackExchange.Profiling.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
