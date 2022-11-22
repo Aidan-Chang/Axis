@@ -1,6 +1,5 @@
 ﻿using Axis.Data.Abstraction;
 using Microsoft.Extensions.Configuration;
-using System.Text.Json;
 
 namespace Axis.Data.Database.Configuration;
 
@@ -33,7 +32,7 @@ public class DatabaseConnectionLoaderProvider : ConfigurationProvider, IConfigur
         string.IsNullOrEmpty(options.ConnectionName) == false &&
         string.IsNullOrEmpty(options.ConnectionString) == false) {
         string key = $"ConnectionStrings:{options.ConnectionName}";
-        string value = DataUtility.AesDecrypt(options.ConnectionString, options.ConnectionName, options.DatabaseName ?? string.Empty);
+        string value = options.ConnectionString;
         if (connection_strings.ContainsKey(key) == false) {
           connection_strings.Add(key, value);
         }
@@ -47,8 +46,8 @@ public class DatabaseConnectionLoaderProvider : ConfigurationProvider, IConfigur
   }
 
   private DatabaseOptions? resolve(FileInfo file) {
-    string text = DataUtility.GzDecompress(file);
-    DatabaseOptions? options = JsonSerializer.Deserialize<DatabaseOptions>(text);
+    string text = File.OpenRead(file.FullName).GzDecompress();
+    DatabaseOptions? options = DatabaseOptions.Load(text);
     return options;
   }
 

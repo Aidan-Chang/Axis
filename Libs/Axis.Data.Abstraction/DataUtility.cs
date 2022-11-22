@@ -47,10 +47,9 @@ public static class DataUtility {
   /// </summary>
   /// <param name="file"></param>
   /// <param name="content"></param>
-  public static void GzCompress(FileInfo file, string content) {
+  public static void GzCompress(this Stream stream, string content) {
     byte[] data = Encoding.UTF8.GetBytes(content);
-    using (FileStream fs = new(file.FullName, FileMode.Create, FileAccess.Write))
-    using (GZipStream gz = new(fs, CompressionLevel.Optimal)) {
+    using (GZipStream gz = new(stream, CompressionLevel.Optimal)) {
       gz.Write(data, 0, data.Length);
     }
   }
@@ -60,11 +59,10 @@ public static class DataUtility {
   /// </summary>
   /// <param name="file"></param>
   /// <returns></returns>
-  public static string GzDecompress(FileInfo file) {
+  public static string GzDecompress(this Stream stream) {
     byte[] data;
-    using (FileStream fs = new(file.FullName, FileMode.Open, FileAccess.Read))
     using (MemoryStream ms = new())
-    using (GZipStream gz = new(fs, CompressionMode.Decompress)) {
+    using (GZipStream gz = new(stream, CompressionMode.Decompress)) {
       gz.CopyTo(ms);
       data = ms.ToArray();
     }
