@@ -21,7 +21,10 @@ public class DatabaseOptions {
   public override string ToString() {
     DatabaseOptions? clone = MemberwiseClone() as DatabaseOptions;
     if (clone != null) {
-      string text = DataUtility.AesEncrypt(clone.ConnectionString, clone.Server ?? string.Empty, clone.DatabaseName ?? string.Empty);
+      string text = DataUtility.AesEncrypt(
+        clone.ConnectionString ?? string.Empty,
+        clone.Server ?? string.Empty,
+        clone.DatabaseName ?? string.Empty);
       clone.ConnectionString = text;
       return JsonSerializer.Serialize(clone);
     }
@@ -31,7 +34,10 @@ public class DatabaseOptions {
   public static DatabaseOptions? Load(string value) {
     DatabaseOptions? options = JsonSerializer.Deserialize<DatabaseOptions>(value ?? string.Empty);
     if (options != null) {
-      options.ConnectionString = DataUtility.AesDecrypt(options.ConnectionString ?? string.Empty, options.Server ?? string.Empty, options.DatabaseName ?? string.Empty);
+      options.ConnectionString = DataUtility.AesDecrypt(
+        options.ConnectionString ?? string.Empty,
+        options.Server ?? string.Empty,
+        options.DatabaseName ?? string.Empty);
       return options;
     }
     return null;

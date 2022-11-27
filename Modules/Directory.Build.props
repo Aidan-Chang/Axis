@@ -1,0 +1,26 @@
+<Project>
+
+  <Import Project="$(SolutionDir)Directory.Build.props" />
+
+  <PropertyGroup>
+    <Purpose></Purpose>
+  </PropertyGroup>
+
+  <Target Name="CopyPlugin" AfterTargets="Build">
+    <Message Text="Executing Copy Plugin Task" Importance="High" />
+    <PropertyGroup Condition="'$(Purpose)'==''">
+      <TargetDirectory>$(SolutionDir)Apps/Axis.App.WebApi/contents/plugins/$(ProjectName)</TargetDirectory>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Purpose)'!=''">
+      <TargetDirectory>$(SolutionDir)Apps/Axis.App.WebApi/contents/plugins/$(Purpose)/$(ProjectName)</TargetDirectory>
+    </PropertyGroup>
+    <Copy
+      SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb;"
+      DestinationFolder="$(TargetDirectory)" />
+    <Copy
+      SourceFiles="@(DependencyFiles)"
+      DestinationFolder="$(TargetDirectory)" />
+    <Message Text="Copied build files to $(TargetDirectory)" Importance="High" />
+  </Target>
+
+</Project>

@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\Axis.Plugin.Abstractin\Axis.Plugin.Abstractin.csproj" />
+    <ProjectReference Include="..\Axis.Plugin\Axis.Plugin.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-  </ItemGroup>
-  
 </Project>

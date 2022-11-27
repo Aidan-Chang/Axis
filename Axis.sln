@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.App.WebApi", "Apps\Axis.App.WebApi\Axis.App.WebApi.csproj", "{4E026D5B-7E24-4112-A8F2-11B681D53976}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{DC614C75-97B9-41F7-AC40-3808269C2C2E}"
+	ProjectSection(SolutionItems) = preProject
+		Modules\Directory.Build.props = Modules\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{3A86214D-1577-446D-BB3A-72FF0275244A}"
 EndProject
@@ -86,9 +89,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.Database.Connecti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.Database.NamingConvention", "Libs\Axis.Data.Database.NamingConvention\Axis.Data.Database.NamingConvention.csproj", "{ECE8E08C-888A-4047-86A1-D6E58BDEC3AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Data.SqlBuilder.Execution", "Libs\Axis.Data.SqlBuilder.Execution\Axis.Data.SqlBuilder.Execution.csproj", "{A7412DC2-7B09-4D85-BF93-844701A8AA56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.SqlBuilder.Execution", "Libs\Axis.Data.SqlBuilder.Execution\Axis.Data.SqlBuilder.Execution.csproj", "{A7412DC2-7B09-4D85-BF93-844701A8AA56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Data.Database.Configuration", "Libs\Axis.Data.Database.Configuration\Axis.Data.Database.Configuration.csproj", "{9C578F17-EAEA-4F79-8CCD-1E2658A2039B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.Database.Configuration", "Libs\Axis.Data.Database.Configuration\Axis.Data.Database.Configuration.csproj", "{9C578F17-EAEA-4F79-8CCD-1E2658A2039B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Plugin.AspNetCore", "Libs\Axis.Plugin.AspNetCore\Axis.Plugin.AspNetCore.csproj", "{82C086B9-9E6E-4DA2-9ADB-B358CA0D5F24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Plugin", "Libs\Axis.Plugin\Axis.Plugin.csproj", "{B11AEFBA-659D-4BD3-9CA3-40AC747F03E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -200,6 +207,14 @@ Global
 		{9C578F17-EAEA-4F79-8CCD-1E2658A2039B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C578F17-EAEA-4F79-8CCD-1E2658A2039B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C578F17-EAEA-4F79-8CCD-1E2658A2039B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82C086B9-9E6E-4DA2-9ADB-B358CA0D5F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C086B9-9E6E-4DA2-9ADB-B358CA0D5F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C086B9-9E6E-4DA2-9ADB-B358CA0D5F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C086B9-9E6E-4DA2-9ADB-B358CA0D5F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B11AEFBA-659D-4BD3-9CA3-40AC747F03E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B11AEFBA-659D-4BD3-9CA3-40AC747F03E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B11AEFBA-659D-4BD3-9CA3-40AC747F03E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B11AEFBA-659D-4BD3-9CA3-40AC747F03E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,6 +254,8 @@ Global
 		{ECE8E08C-888A-4047-86A1-D6E58BDEC3AF} = {F49288AF-5078-4001-BF7D-62782A5AC914}
 		{A7412DC2-7B09-4D85-BF93-844701A8AA56} = {F49288AF-5078-4001-BF7D-62782A5AC914}
 		{9C578F17-EAEA-4F79-8CCD-1E2658A2039B} = {F49288AF-5078-4001-BF7D-62782A5AC914}
+		{82C086B9-9E6E-4DA2-9ADB-B358CA0D5F24} = {4D42C776-FC5D-4D8B-9918-572774023DCF}
+		{B11AEFBA-659D-4BD3-9CA3-40AC747F03E7} = {4D42C776-FC5D-4D8B-9918-572774023DCF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5ED97765-ED0B-49D3-91B8-A41E665CA11A}

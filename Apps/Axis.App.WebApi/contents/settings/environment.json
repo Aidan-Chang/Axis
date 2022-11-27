@@ -7,7 +7,7 @@
   },
   "Database": {
     "Type": "PostgreSql",
-    "NamingConvention": "LowerCase",
+    "NamingConvention": "CamelCase",
     "Migration": true,
     "OpeningIdentifier": "\"",
     "ClosingIdentifier": "\""
