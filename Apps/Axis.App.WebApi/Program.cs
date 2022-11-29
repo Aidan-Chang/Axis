@@ -27,7 +27,7 @@ builder.Configuration.AddDbConnections(
   options => {
     options.Path = Path.Combine(
       builder.Environment.ContentRootPath,
-      builder.Configuration["Paths:DatabaseFile"] ?? "contents/settings/db"
+      builder.Configuration["Paths:Database"] ?? "contents/databases"
     );
   });
 
@@ -37,6 +37,10 @@ builder.Host.UseSerilog((context, provider, config)
 // map serilog to ms logger
 builder.Services.AddSingleton(new SerilogLoggerFactory().CreateLogger("api"));
 builder.Services.AddLogging();
+
+// add plugin loader
+builder.Host.UsePluginLoader(options =>
+  builder.Configuration.GetSection("Plugins").Bind(options));
 
 // Add authentication
 builder.Services

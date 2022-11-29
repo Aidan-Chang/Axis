@@ -2,7 +2,7 @@
   "Paths": {
     "Base": "",
     "Service": "service",
-    "Database": "contents/databases/db",
+    "Database": "contents/databases",
     "Facial": "contents/identities"
   },
   "Database": {

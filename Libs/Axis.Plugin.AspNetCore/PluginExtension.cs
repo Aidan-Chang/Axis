@@ -20,7 +20,7 @@ public static class PluginExtension {
       throw new ArgumentNullException(nameof(builder));
     }
     if (action == null) {
-      throw new ArgumentNullException("configureLogger");
+      throw new ArgumentNullException("Plugin options is not configured");
     }
     // build options
     action?.Invoke(_options);
@@ -34,13 +34,17 @@ public static class PluginExtension {
     if (Directory.Exists(_options.Path) == false) {
       Directory.CreateDirectory(_options.Path);
     }
+    // get storage
+    PluginLoaderStorage storage = new PluginLoaderStorage(Path.Combine(_options.Path, "package.json"));
+    storage.LoadStates();
+    // TODO: prevent to load disabled assembly/plugin
     // get all assemblies
-    foreach (var dir in new DirectoryInfo(_options.Path).GetDirectories(_options.Pattern, SearchOption.AllDirectories)) {
+    foreach (var dir in new DirectoryInfo(_options.Path).GetDirectories(_options.Pattern)) {
       foreach (var file in dir.GetFiles($"{dir.Name}.dll")) {
         var loader = PluginLoader.CreateFromAssemblyFile(
           file.FullName,
-          /// TODO: plugin: shared types
-          //new Type[] { typeof(IServiceCollection), typeof(ILogger) },
+           /// TODO: plugin: shared types
+           //new Type[] { typeof(IServiceCollection), typeof(ILogger) },
           config => {
             config.PreferSharedTypes = _options.PreferSharedTypes;
             config.IsLazyLoaded = _options.IsLazyLoaded;
@@ -48,7 +52,7 @@ public static class PluginExtension {
             config.EnableHotReload = _options.EnableHotReload;
           });
         // add loader to list
-        _loaders[file.Name] = loader;
+        _loaders[file.FullName] = loader;
       }
     }
     return builder;

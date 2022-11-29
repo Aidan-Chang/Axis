@@ -30,7 +30,7 @@ public class DataProviderTest {
     string text = File.OpenRead("default.db").GzDecompress();
     DatabaseOptions? options = DatabaseOptions.Load(text);
     Assert.NotNull(options);
-    Assert.Equal(options.ConnectionString, "Server=localhost;Database=axis;User Id=postgre;Password=1q2w3e4r5t");
+    Assert.Equal("Server=localhost;Database=axis;User Id=postgre;Password=1q2w3e4r5t", options.ConnectionString);
   }
 
 }
