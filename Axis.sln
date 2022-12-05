@@ -93,9 +93,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.SqlBuilder.Execut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.Database.Configuration", "Libs\Axis.Data.Database.Configuration\Axis.Data.Database.Configuration.csproj", "{9C578F17-EAEA-4F79-8CCD-1E2658A2039B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Plugin.AspNetCore", "Libs\Axis.Plugin.AspNetCore\Axis.Plugin.AspNetCore.csproj", "{82C086B9-9E6E-4DA2-9ADB-B358CA0D5F24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Plugin.AspNetCore", "Libs\Axis.Plugin.AspNetCore\Axis.Plugin.AspNetCore.csproj", "{82C086B9-9E6E-4DA2-9ADB-B358CA0D5F24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Plugin", "Libs\Axis.Plugin\Axis.Plugin.csproj", "{B11AEFBA-659D-4BD3-9CA3-40AC747F03E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Plugin", "Libs\Axis.Plugin\Axis.Plugin.csproj", "{B11AEFBA-659D-4BD3-9CA3-40AC747F03E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -69,6 +69,15 @@ public class PluginLoader : IDisposable {
     }
   }
 
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public string Version { get; set; } = string.Empty;
+
+  [JsonInclude]
+  public bool Enabled { get; set; } = true;
+
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Dictionary<string, string>? Dependencies { get; set; } = null;
+
   public bool IsUnloadable => _context.IsCollectible;
 
   public event PluginReloadedEventHandler? Reloaded;

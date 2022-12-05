@@ -34,12 +34,12 @@ public class PluginConfig {
   public TimeSpan ReloadDelay { get; set; } = TimeSpan.FromMilliseconds(200);
 
   public PluginConfig(string mainAssemblyPath) {
-    if (string.IsNullOrEmpty(mainAssemblyPath))
+    if (string.IsNullOrEmpty(mainAssemblyPath)) {
       throw new ArgumentException("Value must be null or not empty", nameof(mainAssemblyPath));
-
-    if (!Path.IsPathRooted(mainAssemblyPath))
+    }
+    if (!Path.IsPathRooted(mainAssemblyPath)) {
       throw new ArgumentException("Value must be an absolute file path", nameof(mainAssemblyPath));
-
+    }
     MainAssemblyPath = mainAssemblyPath;
   }
 

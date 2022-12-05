@@ -1,4 +1,5 @@
 ﻿using Axis.Plugin.Abstractin;
+using Axis.Plugin.AspNetCore.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,7 @@ public static class PluginExtension {
 
   // plugins
   private readonly static PluginOptions _options = new();
-  private readonly static PluginLoaderCollection _loaders = new();
+  private readonly static PluginList _list = new();
   private readonly static List<IWebPlugin> _plugins = new();
 
   public static IHostBuilder UsePluginLoader(this IHostBuilder builder, Action<PluginOptions> action) {
@@ -34,27 +35,40 @@ public static class PluginExtension {
     if (Directory.Exists(_options.Path) == false) {
       Directory.CreateDirectory(_options.Path);
     }
-    // get storage
-    PluginLoaderStorage storage = new PluginLoaderStorage(Path.Combine(_options.Path, "package.json"));
-    storage.LoadStates();
-    // TODO: prevent to load disabled assembly/plugin
+    // set loader base path && storage
+    _list.BasePath = _options.Path;
+    _list.Storage = new PluginLoaderFileStorage(_options.Path);
+    _list.Load();
     // get all assemblies
-    foreach (var dir in new DirectoryInfo(_options.Path).GetDirectories(_options.Pattern)) {
+    DirectoryInfo root = new DirectoryInfo(_list.BasePath);
+    foreach (var dir in root.GetDirectories(_options.Pattern)) {
       foreach (var file in dir.GetFiles($"{dir.Name}.dll")) {
-        var loader = PluginLoader.CreateFromAssemblyFile(
-          file.FullName,
-           /// TODO: plugin: shared types
-           //new Type[] { typeof(IServiceCollection), typeof(ILogger) },
-          config => {
-            config.PreferSharedTypes = _options.PreferSharedTypes;
-            config.IsLazyLoaded = _options.IsLazyLoaded;
-            config.IsUnloadable = _options.IsUnloadable;
-            config.EnableHotReload = _options.EnableHotReload;
-          });
-        // add loader to list
-        _loaders[file.FullName] = loader;
+        if (dir.Name != file.Name.Replace(file.Extension, string.Empty)) {
+          continue;
+        }
+        PluginInfo info = _list[dir.Name] ?? new PluginInfo() {
+          Name = dir.Name,
+          Version = "",
+          Enabled = true,
+        };
+        if (info.Enabled == true) {
+          var loader = PluginLoader.CreateFromAssemblyFile(
+            file.FullName,
+            /// TODO: plugin: shared types
+            //new Type[] { typeof(IServiceCollection), typeof(ILogger) },
+            config => {
+              config.PreferSharedTypes = _options.PreferSharedTypes;
+              config.IsLazyLoaded = _options.IsLazyLoaded;
+              config.IsUnloadable = _options.IsUnloadable;
+              config.EnableHotReload = _options.EnableHotReload;
+            });
+          info.Loader = loader;
+          // add loader to list
+          _list[dir.Name] = info;
+        }
       }
     }
+    _list.Save();
     return builder;
   }
 
