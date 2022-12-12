@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 using namespace std;
 
@@ -12,12 +12,13 @@ class WinTouchKeyboard {
   private:
     WinTouchKeyboard() = default;
     ~WinTouchKeyboard() = default;
-    bool OpenOSK();
+    //bool OpenOSK();
     bool OpenTabTip();
-    bool IsWin10KeyboardVisable();
-    bool IsWin7KeyboardVisable();
-    bool IsNewVersion();
-    vector<string> Split(string text, string delimeter);
-    string GetCurrentVersion();
-    int FindTabTipProcess();
+    //bool IsWin10KeyboardVisable();
+    //bool IsWin7KeyboardVisable();
+    //bool IsNewVersion();
+    //vector<string> Split(string text, string delimeter);
+    //string GetCurrentVersion();
+    //int FindTabTipProcess();
+    bool IsInputPaneOpen();
 };
