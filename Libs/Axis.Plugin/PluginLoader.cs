@@ -2,6 +2,7 @@
 using Axis.Plugin.Loader;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Text.Json.Serialization;
 
 namespace Axis.Plugin;
 

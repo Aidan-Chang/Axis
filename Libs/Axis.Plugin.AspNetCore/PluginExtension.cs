@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Axis.Plugin.AspNetCore;
@@ -46,11 +47,12 @@ public static class PluginExtension {
         if (dir.Name != file.Name.Replace(file.Extension, string.Empty)) {
           continue;
         }
+        FileVersionInfo version = FileVersionInfo.GetVersionInfo(file.FullName);
         PluginInfo info = _list[dir.Name] ?? new PluginInfo() {
           Name = dir.Name,
-          Version = "",
           Enabled = true,
         };
+        info.Version = version.FileVersion ?? "";
         if (info.Enabled == true) {
           var loader = PluginLoader.CreateFromAssemblyFile(
             file.FullName,
@@ -76,8 +78,12 @@ public static class PluginExtension {
     ILoggerFactory? loggerFactory = builder.Services.BuildServiceProvider().GetService<ILoggerFactory>();
     var logger = loggerFactory?.CreateLogger<PluginLoader>();
     // get all loaders
-    foreach (var name in _loaders.Names) {
-      var loader = _loaders[name];
+    foreach (var name in _list.Names) {
+      PluginInfo? info = _list[name];
+      if (info == null) {
+        continue;
+      }
+      PluginLoader loader = info.Loader;
       if (loader == null) {
         continue;
       }

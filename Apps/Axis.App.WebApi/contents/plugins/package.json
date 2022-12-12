@@ -1,0 +1,12 @@
+{
+  "Axis.Module.App.Common": {
+    "Name": "Axis.Module.App.Common",
+    "Version": "7.22.11.10",
+    "Enabled": true
+  },
+  "Axis.Module.App.Management": {
+    "Name": "Axis.Module.App.Management",
+    "Version": "7.22.11.10",
+    "Enabled": true
+  }
+}
