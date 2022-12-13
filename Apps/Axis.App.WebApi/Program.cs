@@ -1,5 +1,6 @@
 using Axis.Data.Database.Configuration;
 using Axis.Data.Database.NamingConvention;
+using Axis.Data.Provider.EntityFramework.Storages;
 using Axis.Data.SqlBuilder.Execution;
 using Axis.Identity.Authencation.Jwt;
 using Axis.Message.RabbitMq;
@@ -7,6 +8,7 @@ using Axis.Message.SignalR.Hubs;
 using Axis.Plugin.AspNetCore;
 using Axis.Web.Extension.Common.Handlers;
 using Axis.Web.Extension.Worker.Filters;
+using Axis.Web.Extension.Worker.Storages;
 using Hangfire;
 using Hangfire.PostgreSql;
 using MediatR;
@@ -119,14 +121,18 @@ builder.Services.AddSingleton(provider =>
     options
       .EnableSensitiveDataLogging()
       .UseLoggerFactory(provider.GetService<ILoggerFactory>())
-      .UseNpgsql(builder.Configuration.GetConnectionString("default"), x => x.MigrationsHistoryTable("migrations", "app"))
-      .UseNamingConvention(name: builder.Configuration["NamingConvention"] ?? "CamelCase");
+      .UseStorage(
+        builder.Configuration["Database:Type"] ?? "",
+        builder.Configuration.GetConnectionString("default") ?? "")
+      .UseNamingConvention(name: builder.Configuration["Database:NamingConvention"] ?? "CamelCase");
   }));
 
 // Add Hangfire
 builder.Services
   .AddHangfire(options => {
-    options.UsePostgreSqlStorage(builder.Configuration.GetConnectionString("default"));
+    options.UseHangfireStorage(
+      builder.Configuration["Database:Type"] ?? "",
+      builder.Configuration.GetConnectionString("default") ?? "");
   })
   .AddHangfireServer(options => {
     options.WorkerCount = Environment.ProcessorCount;

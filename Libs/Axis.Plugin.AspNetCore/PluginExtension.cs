@@ -44,6 +44,7 @@ public static class PluginExtension {
     DirectoryInfo root = new DirectoryInfo(_list.BasePath);
     foreach (var dir in root.GetDirectories(_options.Pattern)) {
       foreach (var file in dir.GetFiles($"{dir.Name}.dll")) {
+        // same name with dll file name and directory name
         if (dir.Name != file.Name.Replace(file.Extension, string.Empty)) {
           continue;
         }
@@ -70,6 +71,7 @@ public static class PluginExtension {
         }
       }
     }
+    // save to local file
     _list.Save();
     return builder;
   }
