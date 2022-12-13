@@ -130,21 +130,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Axis.Tools.TabTip.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WinTouchKeyboard.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Axis.Tools.TabTip.cpp" />
+    <ClCompile Include="TabTipMod.cpp" />
     <ClCompile Include="WinTouchKeyboard.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Axis.Tools.TabTip.rc" />
+    <Image Include="TabTipMod.ico" />
+    <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Axis.Tools.TabTip.ico" />
-    <Image Include="small.ico" />
+    <ResourceCompile Include="TabTipMod.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

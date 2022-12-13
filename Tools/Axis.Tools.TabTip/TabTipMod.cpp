@@ -1,5 +1,4 @@
 #include "framework.h"
-#include "Axis.Tools.TabTip.h"
 #include "WinTouchKeyboard.h"
 
 int APIENTRY wWinMain(
