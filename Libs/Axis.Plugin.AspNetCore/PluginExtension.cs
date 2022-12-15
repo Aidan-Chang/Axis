@@ -41,7 +41,7 @@ public static class PluginExtension {
     _list.Storage = new PluginLoaderFileStorage(_options.Path);
     _list.Load();
     // get all assemblies
-    DirectoryInfo root = new DirectoryInfo(_list.BasePath);
+    DirectoryInfo root = new(_list.BasePath);
     foreach (var dir in root.GetDirectories(_options.Pattern)) {
       foreach (var file in dir.GetFiles($"{dir.Name}.dll")) {
         // same name with dll file name and directory name
@@ -85,7 +85,7 @@ public static class PluginExtension {
       if (info == null) {
         continue;
       }
-      PluginLoader loader = info.Loader;
+      PluginLoader? loader = info.Loader;
       if (loader == null) {
         continue;
       }
