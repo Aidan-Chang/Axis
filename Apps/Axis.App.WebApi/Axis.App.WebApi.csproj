@@ -29,8 +29,7 @@
     <ProjectReference Include="..\..\Libs\Axis.Data.Database.NamingConvention\Axis.Data.Database.NamingConvention.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Data.Provider.EntityFramework\Axis.Data.Provider.EntityFramework.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Data.SqlBuilder.Execution\Axis.Data.SqlBuilder.Execution.csproj" />
-    <ProjectReference Include="..\..\Libs\Axis.Identity.Abstraction\Axis.Identity.Abstraction.csproj" />
-    <ProjectReference Include="..\..\Libs\Axis.Identity.Authencation.Jwt\Axis.Identity.Authencation.Jwt.csproj" />
+    <ProjectReference Include="..\..\Libs\Axis.Identity.Extension\Axis.Identity.Extension.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Message.RabbitMq\Axis.Message.RabbitMq.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Message.SignalR\Axis.Message.SignalR.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Plugin.AspNetCore\Axis.Plugin.AspNetCore.csproj" />

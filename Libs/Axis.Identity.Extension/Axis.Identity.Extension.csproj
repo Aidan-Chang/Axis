@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Axis.Identity.Common\Axis.Identity.Common.csproj" />
+    <ProjectReference Include="..\Axis.Identity.Authencation.Jwt\Axis.Identity.Authencation.Jwt.csproj" />
   </ItemGroup>
 
 </Project>

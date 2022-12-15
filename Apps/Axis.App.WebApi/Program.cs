@@ -3,6 +3,7 @@ using Axis.Data.Database.NamingConvention;
 using Axis.Data.Provider.EntityFramework.Storages;
 using Axis.Data.SqlBuilder.Execution;
 using Axis.Identity.Authencation.Jwt;
+using Axis.Identity.Extension;
 using Axis.Message.RabbitMq;
 using Axis.Message.SignalR.Hubs;
 using Axis.Plugin.AspNetCore;
@@ -10,7 +11,6 @@ using Axis.Web.Extension.Common.Handlers;
 using Axis.Web.Extension.Worker.Filters;
 using Axis.Web.Extension.Worker.Storages;
 using Hangfire;
-using Hangfire.PostgreSql;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -44,12 +44,25 @@ builder.Services.AddLogging();
 builder.Host.UsePluginLoader(options =>
   builder.Configuration.GetSection("Plugins").Bind(options));
 
+// add identity
+builder.Services.AddIdentity(options => {
+  options.ClaimsIdentity.UserIdClaimType = builder.Configuration["Jwt:UserIdClaimType"] ?? "userid";
+  options.ClaimsIdentity.UserNameClaimType = builder.Configuration["Jwt:UserNameClaimType"] ?? "username";
+  options.Password.RequireDigit = false;
+  options.Password.RequiredLength = 4;
+  options.Password.RequireNonAlphanumeric = false;
+  options.Password.RequireUppercase = false;
+  options.Password.RequireLowercase = false;
+});
+
 // Add authentication
 builder.Services
   .AddAuthentication(options => {
     options.DefaultScheme = "Bearer";
     options.DefaultChallengeScheme = "Bearer";
   })
+  /// TODO: ntlm:authencation
+  //.AddNegotiate();
   .AddJwtBearer(options => {
     options.IncludeErrorDetails = true;
     options.TokenValidationParameters = new TokenValidationParameters {
@@ -63,7 +76,7 @@ builder.Services
 
 // Add authorization
 builder.Services.AddAuthorization(options => {
-  AuthorizationPolicyBuilder policy = new("Jwt");
+  AuthorizationPolicyBuilder policy = new("Bearer");
   policy.RequireAuthenticatedUser();
   policy.RequireClaim("jti");
   policy.AddRequirements(new TokenAuthorizationRequiremnt());
@@ -77,7 +90,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {
   options.AddSecurityDefinition("Bearer", new() {
     Name = "Authorization",
-    Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+    Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
     Type = SecuritySchemeType.ApiKey,
     In = ParameterLocation.Header,
     Scheme = "Bearer",
