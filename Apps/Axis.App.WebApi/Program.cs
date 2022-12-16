@@ -1,17 +1,15 @@
-using Axis.Data.Database.Configuration;
-using Axis.Data.Database.NamingConvention;
-using Axis.Data.Provider.EntityFramework.Storages;
-using Axis.Data.SqlBuilder.Execution;
+using Axis.Data.Provider.DataSource;
+using Axis.Data.Provider.EntityFramework;
+using Axis.Data.Provider.SqlBuilder;
+using Axis.Identity;
 using Axis.Message.RabbitMq;
 using Axis.Message.SignalR.Hubs;
-using Axis.Plugin.AspNetCore;
+using Axis.Plugin;
 using Axis.Web.Extension.Common.Handlers;
-using Axis.Web.Extension.Identity;
 using Axis.Web.Extension.Worker.Filters;
 using Axis.Web.Extension.Worker.Storages;
 using Hangfire;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -22,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetBasePath(Path.Combine(builder.Environment.ContentRootPath, "contents", "settings"));
 builder.Configuration.AddJsonFile("environment.json", false, false);
 builder.Configuration.AddJsonFile("encryption.json", false, false);
-builder.Configuration.AddDbConnections(
+builder.Configuration.AddDataSource(
   options => {
     options.Path = Path.Combine(
       builder.Environment.ContentRootPath,
@@ -84,21 +82,12 @@ builder.Services.AddCors(options => {
 });
 
 // Add query factory
-builder.Services.AddScoped(provider => new QueryFactory());
-builder.Services.AddSingleton<Func<QueryFactory>>(
-  provider => () => provider.CreateScope().ServiceProvider.GetRequiredService<QueryFactory>());
+builder.Services.AddSqlBuilder(options =>
+  builder.Configuration.GetSection("Database").Bind(options));
 
 // Add database context builder
-builder.Services.AddSingleton(provider =>
-  new Action<DbContextOptionsBuilder>(options => {
-    options
-      .EnableSensitiveDataLogging()
-      .UseLoggerFactory(provider.GetService<ILoggerFactory>())
-      .UseStorage(
-        builder.Configuration["Database:Type"] ?? "",
-        builder.Configuration.GetConnectionString("default") ?? "")
-      .UseNamingConvention(name: builder.Configuration["Database:NamingConvention"] ?? "CamelCase");
-  }));
+builder.Services.AddDbContextBuilder(options =>
+  builder.Configuration.GetSection("Database").Bind(options));
 
 // Add Hangfire
 builder.Services

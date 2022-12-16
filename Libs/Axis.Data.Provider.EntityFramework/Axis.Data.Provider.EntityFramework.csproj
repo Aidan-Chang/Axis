@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Axis.Data.Abstraction\Axis.Data.Abstraction.csproj" />
+    <ProjectReference Include="..\Axis.Data.Database.NamingConvention\Axis.Data.Database.NamingConvention.csproj" />
   </ItemGroup>
 
 </Project>

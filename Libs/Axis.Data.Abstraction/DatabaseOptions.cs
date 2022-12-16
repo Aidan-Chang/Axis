@@ -18,6 +18,8 @@ public class DatabaseOptions {
 
   public TimeSpan CommandTimeout { get; set; } = new TimeSpan(0, 0, 30);
 
+  public string NamingConvention { get; set; } = "CamelCase";
+
   public override string ToString() {
     DatabaseOptions? clone = MemberwiseClone() as DatabaseOptions;
     if (clone != null) {

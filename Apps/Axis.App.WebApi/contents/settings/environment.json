@@ -6,7 +6,7 @@
     "Facial": "contents/identities"
   },
   "Database": {
-    "Type": "PostgreSql",
+    "ProviderName": "PostgreSql",
     "NamingConvention": "SnakeCase",
     "Migration": true,
     "OpeningIdentifier": "\"",
