@@ -2,19 +2,16 @@ using Axis.Data.Database.Configuration;
 using Axis.Data.Database.NamingConvention;
 using Axis.Data.Provider.EntityFramework.Storages;
 using Axis.Data.SqlBuilder.Execution;
-using Axis.Identity.Authencation.Jwt;
-using Axis.Identity.Extension;
 using Axis.Message.RabbitMq;
 using Axis.Message.SignalR.Hubs;
 using Axis.Plugin.AspNetCore;
 using Axis.Web.Extension.Common.Handlers;
+using Axis.Web.Extension.Identity;
 using Axis.Web.Extension.Worker.Filters;
 using Axis.Web.Extension.Worker.Storages;
 using Hangfire;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -45,45 +42,9 @@ builder.Host.UsePluginLoader(options =>
   builder.Configuration.GetSection("Plugins").Bind(options));
 
 // add identity
-builder.Services.AddIdentity(options => {
-  options.ClaimsIdentity.UserIdClaimType = builder.Configuration["Jwt:UserIdClaimType"] ?? "userid";
-  options.ClaimsIdentity.UserNameClaimType = builder.Configuration["Jwt:UserNameClaimType"] ?? "username";
-  options.Password.RequireDigit = false;
-  options.Password.RequiredLength = 4;
-  options.Password.RequireNonAlphanumeric = false;
-  options.Password.RequireUppercase = false;
-  options.Password.RequireLowercase = false;
-});
-
-// Add authentication
-builder.Services
-  .AddAuthentication(options => {
-    options.DefaultScheme = "Bearer";
-    options.DefaultChallengeScheme = "Bearer";
-  })
-  /// TODO: ntlm:authencation
-  //.AddNegotiate();
-  .AddJwtBearer(options => {
-    options.IncludeErrorDetails = true;
-    options.TokenValidationParameters = new TokenValidationParameters {
-      NameClaimType = "username",
-      ValidIssuer = builder.Configuration["Jwt:Issuer"],
-      ValidAudience = builder.Configuration["Jwt:Audience"],
-      IssuerSigningKey = new SymmetricSecurityKey(
-        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty))
-    };
-  });
-
-// Add authorization
-builder.Services.AddAuthorization(options => {
-  AuthorizationPolicyBuilder policy = new("Bearer");
-  policy.RequireAuthenticatedUser();
-  policy.RequireClaim("jti");
-  policy.AddRequirements(new TokenAuthorizationRequiremnt());
-  options.DefaultPolicy = policy.Build();
-});
-// Block the logged out token
-builder.Services.AddScoped<IAuthorizationHandler, TokenAuthorizationHandler>();
+builder.Services.AddWebToken(
+  options => builder.Configuration.GetSection("WebToken:Identity").Bind(options),
+  options => builder.Configuration.GetSection("WebToken:Jwt").Bind(options));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -96,16 +57,15 @@ builder.Services.AddSwaggerGen(options => {
     Scheme = "Bearer",
   });
   options.AddSecurityRequirement(new() { {
-      new OpenApiSecurityScheme {
-        Name = "Bearer",
-        In = ParameterLocation.Header,
-        Reference = new() {
-          Id = "Bearer",
-          Type = ReferenceType.SecurityScheme,
-        }
-      },
-      new List<string>() }
-    });
+    new OpenApiSecurityScheme {
+      Name = "Bearer",
+      In = ParameterLocation.Header,
+      Reference = new() {
+        Id = "Bearer",
+        Type = ReferenceType.SecurityScheme,
+      }
+    },
+    new List<string>() } });
   options.SwaggerDoc(
     "v1",
     builder.Configuration.GetSection("Swagger:v1").Get<OpenApiInfo>()

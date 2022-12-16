@@ -1,11 +1,4 @@
 {
-  "Jwt": {
-    "Key": "VjajaEyIchihVYpHupKaITOFiaCaGuvHvdrapLvEbxgMiavYLQpLFaHyUAgHwaqSQaaliaTcbnNatSmmWBKgRcyb",
-    "Issuer": "axis.io",
-    "Audience": "axis.io",
-    "UserIdClaimType": "userid",
-    "UserNameClaimType": "username"
-  },
   "Encryption": {
     "Key": "iamrallywait4you",
     "Iv": "youarein2myheart"

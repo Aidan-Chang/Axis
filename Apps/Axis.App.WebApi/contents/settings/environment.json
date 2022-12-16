@@ -12,6 +12,27 @@
     "OpeningIdentifier": "\"",
     "ClosingIdentifier": "\""
   },
+  "WebToken": {
+    "Identity": {
+      "ClaimsIdentity": {
+        "UserIdClaimType": "userid",
+        "UserNameClaimType": "username"
+      },
+      "Password": {
+        "RequireDigit": false,
+        "RequiredLength": true,
+        "RequireNonAlphanumeric": false,
+        "RequireUppercase": false,
+        "RequireLowercase": false,
+      }
+    },
+    "Jwt": {
+      "NameClaimType": "username",
+      "ValidIssuer": "axis.io",
+      "Audience": "axis.io",
+      "Key": "VjajaEyIchihVYpHupKaITOFiaCaGuvHvdrapLvEbxgMiavYLQpLFaHyUAgHwaqSQaaliaTcbnNatSmmWBKgRcyb"
+    }
+  },
   "Plugins": {
     "Path": "contents/plugins",
     "PreferSharedTypes": true,

@@ -29,11 +29,11 @@
     <ProjectReference Include="..\..\Libs\Axis.Data.Database.NamingConvention\Axis.Data.Database.NamingConvention.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Data.Provider.EntityFramework\Axis.Data.Provider.EntityFramework.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Data.SqlBuilder.Execution\Axis.Data.SqlBuilder.Execution.csproj" />
-    <ProjectReference Include="..\..\Libs\Axis.Identity.Extension\Axis.Identity.Extension.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Message.RabbitMq\Axis.Message.RabbitMq.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Message.SignalR\Axis.Message.SignalR.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Plugin.AspNetCore\Axis.Plugin.AspNetCore.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Extension.Common\Axis.Web.Extension.Common.csproj" />
+    <ProjectReference Include="..\..\Libs\Axis.Web.Extension.Identity\Axis.Web.Extension.Identity.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Extension.Profiler\Axis.Web.Extension.Profiler.csproj" />
     <ProjectReference Include="..\..\Libs\Axis.Web.Extension.Worker\Axis.Web.Extension.Worker.csproj" />
   </ItemGroup>
