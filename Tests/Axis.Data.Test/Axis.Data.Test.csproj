@@ -25,4 +25,10 @@
     <ProjectReference Include="..\..\Libs\Axis.Data.Abstraction\Axis.Data.Abstraction.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="test.licx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
