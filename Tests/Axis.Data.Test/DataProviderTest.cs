@@ -1,4 +1,4 @@
-using Axis.Data.Abstraction;
+﻿using Axis.Data.Abstraction;
 using Xunit.Abstractions;
 
 namespace Axis.Data.Test;
