@@ -2,7 +2,6 @@
 using Axis.Identity.Authencation.Jwt;
 using Axis.Identity.Common.DbContexts;
 using Axis.Identity.Common.Managers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,14 +26,18 @@ public static class WebTokenServiceExtension {
       .AddRoleValidator<RoleValidator>()
       .AddSignInManager<SignInManager>()
       .AddDefaultTokenProviders();
-
     // Add authentication
     services
       .AddAuthentication(options => {
         options.DefaultScheme = "Bearer";
         options.DefaultChallengeScheme = "Bearer";
       })
-      .AddJwtBearer((Action<JwtBearerOptions>)options2);
+      .AddJwtBearer(options => {
+        WebTokenJwtBearerOptions wjOptions = new();
+        options2.Invoke(wjOptions);
+        options.IncludeErrorDetails = true;
+        options.TokenValidationParameters = wjOptions.TokenValidationParameters;
+      });
 
     // Add authorization
     services
@@ -48,7 +51,6 @@ public static class WebTokenServiceExtension {
 
     // Block the logged out token
     services.AddScoped<IAuthorizationHandler, TokenAuthorizationHandler>();
-
     return services;
   }
 

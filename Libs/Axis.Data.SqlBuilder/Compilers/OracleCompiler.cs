@@ -74,9 +74,9 @@ public class OracleCompiler : Compiler {
   protected override string CompileBasicDateCondition(SqlResult ctx, BasicDateCondition condition) {
     var column = Wrap(condition.Column);
     var value = Parameter(ctx, condition.Value);
-    var sql = "";
-    var valueFormat = "";
-    var isDateTime = condition.Value is DateTime dt;
+    var isDateTime = condition.Value is DateTime;
+    string? valueFormat;
+    string? sql;
     switch (condition.Part) {
       case "date": // assume YY-MM-DD format
         if (isDateTime) {
@@ -93,7 +93,7 @@ public class OracleCompiler : Compiler {
         }
         else {
           // assume HH:MM format
-          if (condition.Value.ToString()!.Split(':').Count() == 2)
+          if (condition.Value.ToString()!.Split(':').Length == 2)
             valueFormat = $"TO_DATE({value}, 'HH24:MI')";
           else // assume HH:MM:SS format
             valueFormat = $"TO_DATE({value}, 'HH24:MI:SS')";
