@@ -29,8 +29,8 @@ builder.Configuration.AddDataSource(
   });
 
 // Add serilog log service
-builder.Host.UseSerilog((context, provider, config)
-  => config.ReadFrom.Configuration(context.Configuration));
+builder.Host.UseSerilog(
+  (context, provider, config) => config.ReadFrom.Configuration(context.Configuration));
 // map serilog to ms logger
 builder.Services.AddSingleton(new SerilogLoggerFactory().CreateLogger("api"));
 builder.Services.AddLogging();
