@@ -20,7 +20,7 @@ export class NavigationManager {
       filter(event => event instanceof NavigationEnd),
       map(event => event as NavigationEnd),
       tap(event => {
-        title.setTitle(config.info?.title ?? '');
+        title.setTitle(config.info?.title || '');
         this.history.push(event.urlAfterRedirects);
         if (this.history.length > 10) {
           this.history.shift();

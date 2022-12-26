@@ -9,7 +9,7 @@ export class ProfilerManager implements OnDestroy {
 
   url = '';
   el?: HTMLScriptElement;
-  private readonly subscriptions$: Subscription[] = [];
+  private readonly subscriptions$: [Subscription?] = [];
 
   constructor(
     private config: ConfigManager) {
@@ -17,7 +17,7 @@ export class ProfilerManager implements OnDestroy {
     config.current.developer.value$ = new BehaviorSubject(localStorage.getItem(config.current.developer.name) == 'true' ? true : false);
     this.initialize();
     this.subscriptions$.push(
-      this.config.current.theme.value$!.subscribe(theme => {
+      this.config.current.theme.value$?.subscribe(theme => {
         if (typeof MiniProfiler !== 'undefined') {
           const classlist = MiniProfiler.container.classList;
           switch (theme) {
@@ -36,12 +36,12 @@ export class ProfilerManager implements OnDestroy {
           }
         }
       }),
-      this.config.current.developer.value$!.subscribe(value => {
+      this.config.current.developer.value$?.subscribe(value => {
         localStorage.setItem(config.current.developer.name, value ? 'true' : 'false');
         localStorage.setItem('MiniProfiler-Display', value ? 'block' : 'none');
         const element = document.getElementsByClassName('mp-results');
         element[0]?.setAttribute('style', `display: ${value ? 'block' : 'none'};`);
-      })
+      }),
     );
   }
 

@@ -10,7 +10,7 @@ export class ConfigManager implements OnDestroy {
   current: AppConfig;
   private primeng: PrimeNGConfig;
   private history$: Observable<NavigationEnd>;
-  private readonly subscriptions$: Subscription[] = [];
+  private readonly subscriptions$: [Subscription?] = [];
 
   constructor(
     @Inject('config') input: AppConfig,
@@ -34,8 +34,14 @@ export class ConfigManager implements OnDestroy {
     );
   }
 
+  private getBrowserTheme(): string | undefined {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      return 'dark';
+    return undefined;
+  }
+
   ngOnDestroy(): void {
-    this.subscriptions$.forEach(s => s.unsubscribe());
+    this.subscriptions$.forEach(s => s?.unsubscribe());
   }
 
 }

@@ -1,4 +1,3 @@
-import { AppInfo } from './info.model';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 
 export interface AppConfig {
@@ -19,7 +18,7 @@ export interface AppConfig {
   },
   readonly language: {
     name: string,
-    list: string[],
+    list: { [id: string]: string },
     value$?: BehaviorSubject<string>,
   },
   readonly developer: {
@@ -38,4 +37,13 @@ export interface AppConfig {
     name: string,
     value$?: ReplaySubject<string>,
   }
+}
+
+export interface AppInfo {
+  title?: string,
+  description?: string,
+  icon?: string,
+  copyright?: string,
+  name?: string,
+  version?: string,
 }

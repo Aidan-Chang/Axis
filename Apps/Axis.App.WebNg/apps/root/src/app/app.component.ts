@@ -11,7 +11,7 @@ import { PrimeNGConfig } from 'primeng/api';
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
 
-  private readonly subscriptions$: Subscription[] = [];
+  private readonly subscriptions$: [Subscription?] = [];
 
   constructor(
     private primeng: PrimeNGConfig,
@@ -24,7 +24,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach(s => s.unsubscribe());
+    this.subscriptions$.forEach(s => s?.unsubscribe());
   }
 
 }

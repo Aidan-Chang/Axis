@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, tap, catchError, throwError } from 'rxjs';
-import { ProfilerManager } from '@axis/lib/core';
+import { AppConfig, ProfilerManager } from '@axis/lib/core';
 
 declare let MiniProfiler: any;
 
@@ -9,17 +9,18 @@ declare let MiniProfiler: any;
 export class ProfilerInterceptor implements HttpInterceptor {
 
   constructor(
+    @Inject('config') private config: AppConfig,
     private profiler: ProfilerManager) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       tap((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse && event.headers && typeof MiniProfiler !== 'undefined' && this.profiler.value$.value)
+        if (event instanceof HttpResponse && event.headers && typeof MiniProfiler !== 'undefined' && this.config.developer.value$?.value)
           this.fetch(event.headers);
       }),
       catchError((event: HttpErrorResponse) => {
-        if (event instanceof HttpErrorResponse && event.headers && typeof MiniProfiler !== 'undefined' && this.profiler.value$.value)
+        if (event instanceof HttpErrorResponse && event.headers && typeof MiniProfiler !== 'undefined' && this.config.developer.value$?.value)
           this.fetch(event.headers);
         return throwError(() => event);
       })

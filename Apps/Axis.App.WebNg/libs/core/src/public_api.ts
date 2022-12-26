@@ -1,5 +1,8 @@
 export * from './core.module';
 
+export * from './api/api.error.model';
+export * from './api/api.result.model';
+
 export * from './configuration/config.model';
 export * from './configuration/config.manager';
 
