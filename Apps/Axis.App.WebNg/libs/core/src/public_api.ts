@@ -9,6 +9,9 @@ export * from './configuration/config.manager';
 export * from './router/navigation.manager';
 
 export * from './theme/theme.manager';
+export * from './theme/theme.behavior.subject';
+
+export * from './translate/translate.manager';
 
 export * from './profiler/profiler.interceptor';
 export * from './profiler/profiler.manager';

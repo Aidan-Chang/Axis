@@ -1,4 +1,5 @@
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { ThemeBehaviorSubject } from '@axis/lib/core';
 
 export interface AppConfig {
   readonly info: AppInfo,
@@ -14,7 +15,7 @@ export interface AppConfig {
   readonly theme: {
     name: string,
     list: string[],
-    value$?: BehaviorSubject<string>,
+    value$?: ThemeBehaviorSubject,
   },
   readonly language: {
     name: string,

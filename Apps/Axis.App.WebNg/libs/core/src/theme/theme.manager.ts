@@ -26,7 +26,7 @@ export class ThemeManager {
     this.link2 = link2;
   }
 
-  private set(value: string): Observable<boolean> {
+  set(value: string): Observable<boolean> {
     return new Observable<boolean>((observer) => {
       let mutation: MutationObserver;
       if (this.link1.href.endsWith(`theme/${value}/theme.css`) == false || this.link2.href.endsWith(`theme/${value}.css`) == false) {
@@ -46,8 +46,9 @@ export class ThemeManager {
               observer.complete();
             }
             else {
-              if (observer.closed == false)
+              if (observer.closed == false) {
                 setTimeout(() => checkStatus(), 100);
+              }
             }
           };
           checkStatus();
