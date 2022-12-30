@@ -17,8 +17,8 @@ public static class WebTokenServiceExtension {
     Action<WebTokenJwtBearerOptions> options2) {
     // Add identity
     services
-      .AddDbContextPool<IdentityDbContext>((provider, builder)
-        => provider.GetRequiredService<Action<DbContextOptionsBuilder>>().Invoke(builder))
+      .AddDbContextPool<IdentityDbContext>(
+        (provider, builder) => provider.GetRequiredService<Action<DbContextOptionsBuilder>>().Invoke(builder))
       .AddIdentity<User, Role>(options)
       .AddEntityFrameworkStores<IdentityDbContext>()
       .AddUserManager<UserManager>()
@@ -28,26 +28,29 @@ public static class WebTokenServiceExtension {
       .AddDefaultTokenProviders();
     // Add authentication
     services
-      .AddAuthentication(options => {
-        options.DefaultScheme = "Bearer";
-        options.DefaultChallengeScheme = "Bearer";
-      })
-      .AddJwtBearer(options => {
-        WebTokenJwtBearerOptions wjOptions = new();
-        options2.Invoke(wjOptions);
-        options.IncludeErrorDetails = true;
-        options.TokenValidationParameters = wjOptions.TokenValidationParameters;
-      });
+      .AddAuthentication(
+        options => {
+          options.DefaultScheme = "Bearer";
+          options.DefaultChallengeScheme = "Bearer";
+        })
+      .AddJwtBearer(
+        options => {
+          WebTokenJwtBearerOptions wjOptions = new();
+          options2.Invoke(wjOptions);
+          options.IncludeErrorDetails = true;
+          options.TokenValidationParameters = wjOptions.TokenValidationParameters;
+        });
 
     // Add authorization
     services
-      .AddAuthorization(options => {
-        AuthorizationPolicyBuilder policy = new("Bearer");
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim("jti");
-        policy.AddRequirements(new TokenAuthorizationRequiremnt());
-        options.DefaultPolicy = policy.Build();
-      });
+      .AddAuthorization(
+        options => {
+          AuthorizationPolicyBuilder policy = new("Bearer");
+          policy.RequireAuthenticatedUser();
+          policy.RequireClaim("jti");
+          policy.AddRequirements(new TokenAuthorizationRequiremnt());
+          options.DefaultPolicy = policy.Build();
+        });
 
     // Block the logged out token
     services.AddScoped<IAuthorizationHandler, TokenAuthorizationHandler>();

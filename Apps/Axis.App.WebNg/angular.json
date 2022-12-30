@@ -114,6 +114,48 @@
         }
       }
     },
+    "chart": {
+      "projectType": "library",
+      "root": "libs/chart",
+      "sourceRoot": "libs/chart/src",
+      "prefix": "am-chart",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "libs/chart/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/chart/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/chart/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "libs/chart/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/chart/**/*.ts",
+              "libs/chart/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "core": {
       "projectType": "library",
       "root": "libs/core",

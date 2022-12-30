@@ -1,12 +1,13 @@
-import { Inject, Injectable } from '@angular/core';
-import { Observable, startWith } from 'rxjs';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Observable, startWith, Subscription } from 'rxjs';
 import { AppConfig } from '@axis/lib/core';
 
 @Injectable({ providedIn: 'root' })
-export class ThemeManager {
+export class ThemeManager implements OnDestroy {
 
   private link1: HTMLLinkElement;
   private link2: HTMLLinkElement;
+  private readonly subscriptions$: [Subscription?] = [];
 
   constructor(
     @Inject('config') private config: AppConfig) {
@@ -35,10 +36,12 @@ export class ThemeManager {
             let link1: CSSStyleSheet | undefined;
             let link2: CSSStyleSheet | undefined;
             for (let i = 0; i < document.styleSheets.length; i++) {
-              if (document.styleSheets[i].href == this.link1.href)
+              if (document.styleSheets[i].href == this.link1.href) {
                 link1 = document.styleSheets[i];
-              if (document.styleSheets[i].href == this.link2.href)
+              }
+              if (document.styleSheets[i].href == this.link2.href) {
                 link2 = document.styleSheets[i];
+              }
             }
             if (link1 && link2) {
               mutation.disconnect();
@@ -69,6 +72,10 @@ export class ThemeManager {
     }).pipe(
       startWith(false),
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions$.forEach(s => s?.unsubscribe());
   }
 
 }
