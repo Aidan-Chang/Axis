@@ -13,6 +13,7 @@ export * from './layout/layout.service';
 export * from './layout/menu.service';
 
 export * from './router/navigation.manager';
+export * from './router/redirect.guard';
 
 export * from './theme/theme.manager';
 export * from './theme/theme.behavior.subject';

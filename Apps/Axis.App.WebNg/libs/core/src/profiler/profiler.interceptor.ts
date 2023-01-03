@@ -3,6 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, Htt
 import { Observable, tap, catchError, throwError } from 'rxjs';
 import { AppConfig, ProfilerManager } from '@axis/lib/core';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare let MiniProfiler: any;
 
 @Injectable()

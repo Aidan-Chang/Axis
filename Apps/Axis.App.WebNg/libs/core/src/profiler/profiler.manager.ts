@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ConfigManager } from '@axis/lib/core';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare let MiniProfiler: any;
 
 @Injectable({ providedIn: 'root' })
