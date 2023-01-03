@@ -33,11 +33,12 @@ builder.Host.UseSerilog(
   (context, provider, config) => config.ReadFrom.Configuration(context.Configuration));
 // map serilog to ms logger
 builder.Services.AddSingleton(new SerilogLoggerFactory().CreateLogger("api"));
-builder.Services.AddLogging();
+builder.Services.AddLogging(
+  config => config.AddSerilog());
 
 // add plugin loader
-builder.Host.UsePluginLoader(options =>
-  builder.Configuration.GetSection("Plugins").Bind(options));
+builder.Host.UsePluginLoader(
+  options => builder.Configuration.GetSection("Plugins").Bind(options));
 
 // add identity
 builder.Services.AddWebToken(
@@ -46,60 +47,65 @@ builder.Services.AddWebToken(
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => {
-  options.AddSecurityDefinition("Bearer", new() {
-    Name = "Authorization",
-    Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
-    Type = SecuritySchemeType.ApiKey,
-    In = ParameterLocation.Header,
-    Scheme = "Bearer",
-  });
-  options.AddSecurityRequirement(new() { {
-    new OpenApiSecurityScheme {
-      Name = "Bearer",
+builder.Services.AddSwaggerGen(
+  options => {
+    options.AddSecurityDefinition("Bearer", new() {
+      Name = "Authorization",
+      Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+      Type = SecuritySchemeType.ApiKey,
       In = ParameterLocation.Header,
-      Reference = new() {
-        Id = "Bearer",
-        Type = ReferenceType.SecurityScheme,
-      }
-    },
-    new List<string>() } });
-  options.SwaggerDoc(
-    "v1",
-    builder.Configuration.GetSection("Swagger:v1").Get<OpenApiInfo>()
-    );
+      Scheme = "Bearer",
+    });
+    options.AddSecurityRequirement(new() { {
+      new OpenApiSecurityScheme {
+        Name = "Bearer",
+        In = ParameterLocation.Header,
+        Reference = new() {
+          Id = "Bearer",
+          Type = ReferenceType.SecurityScheme,
+        }
+      },
+      new List<string>() } });
+    options.SwaggerDoc(
+      "v1",
+      builder.Configuration.GetSection("Swagger:v1").Get<OpenApiInfo>()
+      );
 });
 
 // Add Cors
-builder.Services.AddCors(options => {
-  options.AddPolicy("default", policy => {
-    policy
-      .WithOrigins("*")
-      .AllowAnyOrigin()
-      .AllowAnyMethod()
-      .AllowAnyHeader();
+builder.Services.AddCors(
+  options => {
+    options.AddPolicy("default",
+      policy => {
+        policy
+          .WithOrigins("*")
+          .AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader();
+      });
   });
-});
 
 // Add query factory
-builder.Services.AddSqlBuilder(options =>
-  builder.Configuration.GetSection("Database").Bind(options));
+builder.Services.AddSqlBuilder(
+  options => builder.Configuration.GetSection("Database").Bind(options));
 
 // Add database context builder
-builder.Services.AddDbContextBuilder(options =>
-  builder.Configuration.GetSection("Database").Bind(options));
+builder.Services.AddDbContextBuilder(
+  options => builder.Configuration.GetSection("Database").Bind(options));
 
 // Add Hangfire
 builder.Services
-  .AddHangfire(options => {
-    options.UseHangfireStorage(
-      builder.Configuration["Database:Type"] ?? "",
-      builder.Configuration.GetConnectionString("default") ?? "");
-  })
-  .AddHangfireServer(options => {
-    options.WorkerCount = Environment.ProcessorCount;
-    options.Queues = new[] { builder.Environment.EnvironmentName };
-  });
+  .AddHangfire(
+    options => {
+      options.UseHangfireStorage(
+        builder.Configuration["Database:ProviderName"] ?? "",
+        builder.Configuration.GetConnectionString("default") ?? "");
+    })
+  .AddHangfireServer(
+    options => {
+      options.WorkerCount = Environment.ProcessorCount;
+      options.Queues = new[] { builder.Environment.EnvironmentName };
+    });
 
 // Add context accessor
 builder.Services.AddHttpContextAccessor();
@@ -124,9 +130,10 @@ builder.Services.AddSpaStaticFiles(
 
 // Add controller
 builder.Services
-  .AddControllers(options => {
-    options.Filters.Add<ActionResultHandler>();
-  })
+  .AddControllers(
+    options => {
+      options.Filters.Add<ActionResultHandler>();
+    })
   .AddPlugins();
 
 var app = builder.Build();
@@ -134,13 +141,15 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 // apply swagger
-app.UseSwagger(options => {
-  options.RouteTemplate = $"{app.Configuration["Paths:Service"]}/api/doc/{{documentName}}.{{json|yaml}}";
-});
-app.UseSwaggerUI(options => {
-  options.RoutePrefix = $"{app.Configuration["Paths:Service"]}/api";
-  options.SwaggerEndpoint($"doc/v1.json", "v1");
-});
+app.UseSwagger(
+  options => {
+    options.RouteTemplate = $"{app.Configuration["Paths:Service"]}/api/doc/{{documentName}}.{{json|yaml}}";
+  });
+app.UseSwaggerUI(
+  options => {
+    options.RoutePrefix = $"{app.Configuration["Paths:Service"]}/api";
+    options.SwaggerEndpoint($"doc/v1.json", "v1");
+  });
 
 // apply log request to serilog
 app.UseSerilogRequestLogging();
@@ -189,11 +198,12 @@ app.MapHangfireDashboard($"/{app.Configuration["Paths:Service"] ?? "services"}/w
   });
 
 // spa
-app.UseSpa(options => {
-  options.Options.SourcePath = "ClientApp";
-  if (app.Environment.IsDevelopment()) {
-    options.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-  }
-});
+app.UseSpa(
+  options => {
+    options.Options.SourcePath = "ClientApp";
+    if (app.Environment.IsDevelopment()) {
+      options.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+    }
+  });
 
 app.Run();

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Axis.Data.Abstraction\Axis.Data.Abstraction.csproj" />
+    <ProjectReference Include="..\Axis.Data.Database.Profiler\Axis.Data.Database.Profiler.csproj" />
     <ProjectReference Include="..\Axis.Data.SqlBuilder.Execution\Axis.Data.SqlBuilder.Execution.csproj" />
   </ItemGroup>
 
