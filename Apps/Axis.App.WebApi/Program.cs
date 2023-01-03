@@ -1,4 +1,3 @@
-using Axis.Data.Abstraction;
 using Axis.Data.Provider.DataSource;
 using Axis.Data.Provider.EntityFramework;
 using Axis.Data.Provider.SqlBuilder;
