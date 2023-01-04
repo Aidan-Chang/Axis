@@ -22,3 +22,4 @@ export * from './translate/translate.manager';
 
 export * from './profiler/profiler.interceptor';
 export * from './profiler/profiler.manager';
+export * from './profiler/profile.model';

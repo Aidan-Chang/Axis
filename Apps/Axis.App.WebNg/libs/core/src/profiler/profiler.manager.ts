@@ -1,9 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { ConfigManager } from '@axis/lib/core';
+import { ConfigManager, MiniProfiler } from '@axis/lib/core';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-declare let MiniProfiler: any;
+declare let MiniProfiler: MiniProfiler;
 
 @Injectable({ providedIn: 'root' })
 export class ProfilerManager implements OnDestroy {
