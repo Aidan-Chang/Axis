@@ -247,8 +247,9 @@ internal class ManagedLoadContext : AssemblyLoadContext {
   }
 
   private void OnUnloaded() {
-    if (!_shadowCopyNativeLibraries || !Directory.Exists(_unmanagedDllShadowCopyDirectoryPath))
+    if (!_shadowCopyNativeLibraries || !Directory.Exists(_unmanagedDllShadowCopyDirectoryPath)) {
       return;
+    }
     try {
       Directory.Delete(_unmanagedDllShadowCopyDirectoryPath, recursive: true);
     }

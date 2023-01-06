@@ -1,6 +1,7 @@
 ﻿using Axis.Plugin.Abstractin;
 using Axis.Plugin.Loader.Context;
 using Axis.Plugin.Loader.Internal;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Text.Json.Serialization;
@@ -69,6 +70,7 @@ public class PluginLoader : IPluginLoader, IDisposable {
     if (config.EnableHotReload) {
       StartFileWatcher();
     }
+    Version = FileVersionInfo.GetVersionInfo(config.MainAssemblyPath).FileVersion ?? "";
   }
 
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -93,7 +95,12 @@ public class PluginLoader : IPluginLoader, IDisposable {
     _context = (ManagedLoadContext)_contextBuilder.Build();
     GC.Collect();
     GC.WaitForPendingFinalizers();
-    Reloaded?.Invoke(this, new PluginReloadedEventArgs(new FileInfo(_config.MainAssemblyPath).Name, this));
+    Version = FileVersionInfo.GetVersionInfo(_config.MainAssemblyPath).FileVersion ?? "";
+    Reloaded?.Invoke(this,
+      new PluginReloadedEventArgs(
+        Path.GetFileNameWithoutExtension(_config.MainAssemblyPath),
+        Version,
+        this));
   }
 
   private void StartFileWatcher() {

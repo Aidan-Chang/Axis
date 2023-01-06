@@ -18,7 +18,7 @@ public static class PluginExtension {
   private readonly static PluginCollection _list = new();
   private readonly static List<IWebPlugin> _plugins = new();
 
-  public static IHostBuilder UsePluginLoader(this IHostBuilder builder, Action<PluginOptions> action) {
+  public static IHostBuilder UsePlugins(this IHostBuilder builder, Action<PluginOptions> action) {
     if (builder == null) {
       throw new ArgumentNullException(nameof(builder));
     }
@@ -32,52 +32,65 @@ public static class PluginExtension {
       if (_options.Path.ToLower().StartsWith(ctx.HostingEnvironment.ContentRootPath.ToLower()) == false) {
         _options.Path = Path.Combine(ctx.HostingEnvironment.ContentRootPath, _options.Path);
       }
-    });
-    // create directory
-    if (Directory.Exists(_options.Path) == false) {
-      Directory.CreateDirectory(_options.Path);
-    }
-    // set loader base path && storage
-    _list.BasePath = _options.Path;
-    _list.Storage = new PluginLoaderFileStorage(_options.Path);
-    _list.Load();
-    // get all assemblies
-    DirectoryInfo root = new(_list.BasePath);
-    foreach (var dir in root.GetDirectories(_options.Pattern)) {
-      foreach (var file in dir.GetFiles($"{dir.Name}.dll")) {
-        // same name with dll file name and directory name
-        if (dir.Name != file.Name.Replace(file.Extension, string.Empty)) {
-          continue;
-        }
-        FileVersionInfo version = FileVersionInfo.GetVersionInfo(file.FullName);
-        PluginEntry info = _list[dir.Name] ?? new PluginEntry() {
-          Name = dir.Name,
-          Enabled = true,
-        };
-        info.Version = version.FileVersion ?? "";
-        if (info.Enabled == true) {
-          var loader = PluginLoader.CreateFromAssemblyFile(
-            file.FullName,
-            /// TODO: plugin: shared types
-            //new Type[] { typeof(IServiceCollection), typeof(ILogger) },
-            config => {
-              config.PreferSharedTypes = _options.PreferSharedTypes;
-              config.IsLazyLoaded = _options.IsLazyLoaded;
-              config.IsUnloadable = _options.IsUnloadable;
-              config.EnableHotReload = _options.EnableHotReload;
-            });
-          info.Loader = loader;
-          // add loader to list
-          _list[dir.Name] = info;
+      ILoggerFactory? loggerFactory = services.BuildServiceProvider().GetService<ILoggerFactory>();
+      var logger = loggerFactory?.CreateLogger<PluginLoader>();
+      // create directory
+      if (Directory.Exists(_options.Path) == false) {
+        Directory.CreateDirectory(_options.Path);
+      }
+      // set loader base path && storage
+      _list.BasePath = _options.Path;
+      _list.Storage = new PluginLoaderFileStorage(_options.Path);
+      _list.Load();
+      // get all assemblies
+      DirectoryInfo root = new(_list.BasePath);
+      foreach (var dir in root.GetDirectories(_options.Pattern)) {
+        foreach (var file in dir.GetFiles($"{dir.Name}.dll")) {
+          // same name with dll file name and directory name
+          if (dir.Name != file.Name.Replace(file.Extension, string.Empty)) {
+            continue;
+          }
+          FileVersionInfo version = FileVersionInfo.GetVersionInfo(file.FullName);
+          PluginEntry entry = _list[dir.Name] ?? new PluginEntry() {
+            Name = dir.Name,
+            Enabled = true,
+          };
+          entry.Version = version.FileVersion ?? "";
+          if (entry.Enabled == true) {
+            var loader = PluginLoader.CreateFromAssemblyFile(
+              file.FullName,
+              /// TODO: plugin: shared types
+              //new Type[] { typeof(IServiceCollection), typeof(ILogger) },
+              config => {
+                config.PreferSharedTypes = _options.PreferSharedTypes;
+                config.IsLazyLoaded = _options.IsLazyLoaded;
+                config.IsUnloadable = _options.IsUnloadable;
+                config.EnableHotReload = _options.EnableHotReload;
+              });
+            /// TODO: plugin: assembly hot reload & unloadable
+            loader.Reloaded += (sender, e) => {
+              if (_list != null) {
+                PluginEntry? entry = _list[e.Name];
+                if (entry != null) {
+                  entry.Version = e.Version;
+                  _list.Save();
+                }
+              }
+              logger?.LogInformation($"Plugins reloaded - Assembly: {e.Name}, Version: {e.Version}");
+            };
+            entry.Loader = loader;
+            // add loader to list
+            _list[dir.Name] = entry;
+          }
         }
       }
-    }
-    // save to local file
-    _list.Save();
+      // save to local file
+      _list.Save();
+    });
     return builder;
   }
 
-  public static IMvcBuilder AddPlugins(this IMvcBuilder builder) {
+  public static IMvcBuilder AddPluginServices(this IMvcBuilder builder) {
     ILoggerFactory? loggerFactory = builder.Services.BuildServiceProvider().GetService<ILoggerFactory>();
     var logger = loggerFactory?.CreateLogger<PluginLoader>();
     // get all loaders
@@ -90,21 +103,6 @@ public static class PluginExtension {
       if (loader == null) {
         continue;
       }
-      /// TODO: plugin: assembly hot reload & unloadable
-      loader.Reloaded += (sender, e) => {
-        logger?.LogInformation($"Plugins - Assembly reloaded: {e.Name}");
-        var loader = (PluginLoader)sender;
-        var assembly = loader.LoadDefaultAssembly();
-        var factory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
-        foreach (var part in factory.GetApplicationParts(assembly)) {
-          builder.PartManager.ApplicationParts.Add(part);
-        }
-        //foreach (var type in assembly.GetTypes().Where(t => typeof(IWebPlugin).IsAssignableFrom(t) && !t.IsAbstract)) {
-        //  var plugin = (IWebPlugin)Activator.CreateInstance(type)!;
-        //  _plugins.Add(plugin);
-        //  logger?.LogInformation($"Plugins - Assembly reloaded Found entry: {plugin.GetType().FullName}");
-        //}
-      };
       var assembly = loader.LoadDefaultAssembly();
       // load mvc application part from assemblies
       var factory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
@@ -136,7 +134,7 @@ public static class PluginExtension {
     return builder;
   }
 
-  public static void UsePlugins(this IApplicationBuilder app) {
+  public static void UsePluginServices(this IApplicationBuilder app) {
     ILoggerFactory? loggerFactory = app.ApplicationServices.GetService<ILoggerFactory>();
     var logger = loggerFactory?.CreateLogger<PluginLoader>();
     // configure plugin service

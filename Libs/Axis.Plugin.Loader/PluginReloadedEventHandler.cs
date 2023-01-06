@@ -6,10 +6,13 @@ public class PluginReloadedEventArgs : EventArgs {
 
   public string Name { get; set; }
 
+  public string Version { get; set; }
+
   public PluginLoader Loader { get; }
 
-  public PluginReloadedEventArgs(string name, PluginLoader loader) {
+  public PluginReloadedEventArgs(string name, string version, PluginLoader loader) {
     Name = name;
+    Version = version;
     Loader = loader;
   }
 

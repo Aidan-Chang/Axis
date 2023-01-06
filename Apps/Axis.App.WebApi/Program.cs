@@ -37,7 +37,7 @@ builder.Services.AddLogging(
   config => config.AddSerilog());
 
 // add plugin loader
-builder.Host.UsePluginLoader(
+builder.Host.UsePlugins(
   options => builder.Configuration.GetSection("Plugins").Bind(options));
 
 // add identity
@@ -134,7 +134,8 @@ builder.Services
     options => {
       options.Filters.Add<ActionResultHandler>();
     })
-  .AddPlugins();
+  // Add plugin services
+  .AddPluginServices();
 
 var app = builder.Build();
 
@@ -180,8 +181,8 @@ app.UseRabbitMq(options => { });
 app.UseAuthentication();
 app.UseAuthorization();
 
-// apply plugins
-app.UsePlugins();
+// apply plugin services
+app.UsePluginServices();
 
 // endpoints
 app.MapControllers();

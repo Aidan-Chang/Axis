@@ -12,9 +12,10 @@ public static class SqlBuilderExtension {
     Action<DatabaseOptions> action) {
     DatabaseOptions options = new DatabaseOptions();
     action.Invoke(options);
-    // Add query factory
+    // Add query factory scoped
     services.AddScoped(
       provider => new QueryFactory(options.CreateConnection()));
+    // Add query factory singleton
     services.AddSingleton<Func<QueryFactory>>(
       provider =>
         () => provider.CreateScope().ServiceProvider.GetRequiredService<QueryFactory>());

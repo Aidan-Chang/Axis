@@ -1,6 +1,10 @@
-﻿namespace Axis.Plugin.Loader.Internal;
+﻿using System.Diagnostics;
 
+namespace Axis.Plugin.Loader.Internal;
+
+[DebuggerStepThrough]
 internal class Debouncer : IDisposable {
+
   private readonly CancellationTokenSource _cts = new();
   private readonly TimeSpan _waitTime;
   private int _counter;
@@ -9,6 +13,8 @@ internal class Debouncer : IDisposable {
     _waitTime = waitTime;
   }
 
+  [DebuggerStepThrough]
+  [DebuggerHidden]
   public void Execute(Action action) {
     var current = Interlocked.Increment(ref _counter);
     Task.Delay(_waitTime).ContinueWith(task => {
@@ -22,4 +28,5 @@ internal class Debouncer : IDisposable {
   public void Dispose() {
     _cts.Cancel();
   }
+
 }
