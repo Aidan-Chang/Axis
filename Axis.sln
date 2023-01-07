@@ -105,7 +105,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.Database.Profiler
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Data.Provider.DataSource", "Libs\Axis.Data.Provider.DataSource\Axis.Data.Provider.DataSource.csproj", "{C50ED783-E5A4-4813-80C1-B984410D7756}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Plugin.Storage.FileStorage", "Libs\Axis.Plugin.Storage.FileStorage\Axis.Plugin.Storage.FileStorage.csproj", "{72DCB7B6-FFF9-41AF-ADF2-4190C5CE2A50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Plugin.Storage.FileStorage", "Libs\Axis.Plugin.Storage.FileStorage\Axis.Plugin.Storage.FileStorage.csproj", "{72DCB7B6-FFF9-41AF-ADF2-4190C5CE2A50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Plugin.Test", "Tests\Axis.Plugin.Test\Axis.Plugin.Test.csproj", "{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -501,6 +503,18 @@ Global
 		{72DCB7B6-FFF9-41AF-ADF2-4190C5CE2A50}.Release|x64.Build.0 = Release|Any CPU
 		{72DCB7B6-FFF9-41AF-ADF2-4190C5CE2A50}.Release|x86.ActiveCfg = Release|Any CPU
 		{72DCB7B6-FFF9-41AF-ADF2-4190C5CE2A50}.Release|x86.Build.0 = Release|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Debug|x64.Build.0 = Debug|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Debug|x86.Build.0 = Debug|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Release|x64.ActiveCfg = Release|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Release|x64.Build.0 = Release|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Release|x86.ActiveCfg = Release|Any CPU
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -546,6 +560,7 @@ Global
 		{9F27D6CB-5DF3-4B87-86BF-182320310854} = {F49288AF-5078-4001-BF7D-62782A5AC914}
 		{C50ED783-E5A4-4813-80C1-B984410D7756} = {F49288AF-5078-4001-BF7D-62782A5AC914}
 		{72DCB7B6-FFF9-41AF-ADF2-4190C5CE2A50} = {4D42C776-FC5D-4D8B-9918-572774023DCF}
+		{D4A09ABE-D608-4C00-8643-5EA65BB5B7E7} = {F8C0B6E2-8396-41DB-BDD8-620621560BC2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5ED97765-ED0B-49D3-91B8-A41E665CA11A}

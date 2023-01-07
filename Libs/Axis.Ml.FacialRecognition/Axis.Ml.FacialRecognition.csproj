@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\arcfaceresnet100-8\" />
+    <Folder Include="Models\depth_googlenet_slim\" />
+    <Folder Include="Models\face_detector_640\" />
+    <Folder Include="Models\landmarks_68_pfld\" />
+    <Folder Include="Models\recognition_resnet27\" />
+  </ItemGroup>
+
 </Project>
