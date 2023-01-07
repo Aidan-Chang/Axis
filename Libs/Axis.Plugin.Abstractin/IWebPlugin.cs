@@ -7,7 +7,7 @@ public interface IWebPlugin {
 
   string Name { get; }
 
-  void ConfigureServices(IServiceCollection services, PluginOptions options = null!);
+  void ConfigureServices(IServiceCollection services);
 
   void Configure(IApplicationBuilder appBuilder);
 

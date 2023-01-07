@@ -1,17 +1,17 @@
 ﻿using Axis.Plugin.Abstractin;
 using System.Text.Json;
 
-namespace Axis.Plugin.Storage;
+namespace Axis.Plugin.Storage.FileStorage;
 
 public class PluginLoaderFileStorage : IPluginLoaderStorage {
 
   public string Path { get; private set; }
 
-  public PluginLoaderFileStorage(string path) {
-    if (string.IsNullOrEmpty(path) == true) {
+  public PluginLoaderFileStorage(PluginOptions options) {
+    if (options == null || string.IsNullOrEmpty(options.Path) == true) {
       throw new NullReferenceException($"Path is empty");
     }
-    Path = System.IO.Path.Combine(path, "package.json");
+    Path = System.IO.Path.Combine(options.Path, "package.json");
   }
 
   public void Save(Dictionary<string, PluginEntry> collection) {

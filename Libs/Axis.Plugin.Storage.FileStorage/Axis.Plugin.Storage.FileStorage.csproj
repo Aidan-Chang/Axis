@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Axis.Plugin.Loader\Axis.Plugin.Loader.csproj" />
-    <ProjectReference Include="..\Axis.Plugin.Storage.FileStorage\Axis.Plugin.Storage.FileStorage.csproj" />
     <ProjectReference Include="..\Axis.Plugin.Storage\Axis.Plugin.Storage.csproj" />
   </ItemGroup>
 

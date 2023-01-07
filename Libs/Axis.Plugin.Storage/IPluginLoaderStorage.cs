@@ -1,6 +1,4 @@
-﻿using Axis.Plugin.Abstractin;
-
-namespace Axis.Plugin.Storage;
+﻿namespace Axis.Plugin.Storage;
 
 public interface IPluginLoaderStorage {
 

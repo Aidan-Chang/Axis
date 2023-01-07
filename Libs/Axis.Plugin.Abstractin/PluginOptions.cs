@@ -4,6 +4,8 @@ public class PluginOptions {
 
   public string Path { get; set; } = string.Empty;
 
+  public string Storage { get; set; } = "File";
+
   public string Pattern { get; set; } = string.Empty;
 
   public Type[]? Types { get; set; }

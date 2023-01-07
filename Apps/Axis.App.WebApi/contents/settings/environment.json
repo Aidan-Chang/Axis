@@ -35,6 +35,7 @@
   },
   "Plugins": {
     "Path": "contents/plugins",
+    "Storage": "File",
     "PreferSharedTypes": true,
     "IsLazyLoaded": true,
     "IsUnloadable": true,

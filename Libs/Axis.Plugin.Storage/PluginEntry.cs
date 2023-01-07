@@ -1,10 +1,14 @@
-﻿using System.Text.Json.Serialization;
+﻿using Axis.Plugin.Abstractin;
+using System.Text.Json.Serialization;
 
-namespace Axis.Plugin.Abstractin;
+namespace Axis.Plugin.Storage;
 
 public class PluginEntry {
 
   public string Name { get; set; } = string.Empty;
+
+  [JsonIgnore]
+  public string Path { get; set; } = string.Empty;
 
   public string Version { get; set; } = string.Empty;
 
@@ -15,5 +19,8 @@ public class PluginEntry {
 
   [JsonIgnore]
   public IPluginLoader? Loader { get; set; }
+
+  [JsonIgnore]
+  public List<IWebPlugin>? WebPlugins { get; set; }
 
 }
