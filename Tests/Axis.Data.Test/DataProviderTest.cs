@@ -18,7 +18,7 @@ public class DataProviderTest {
       ProviderName = "postgres",
       Server = "localhost",
       DatabaseName = "axis",
-      ConnectionString = "Server=localhost;Database=axis;User Id=postgre;Password=1q2w3e4r5t"
+      ConnectionString = "Server=localhost;Database=axis;User Id=axis;Password=1q2w3e4r5t"
     };
     // write to file
     File.Create("default.db").GzCompress(options.ToString());
@@ -30,7 +30,7 @@ public class DataProviderTest {
     string text = File.OpenRead("default.db").GzDecompress();
     DatabaseOptions? options = DatabaseOptions.Load(text);
     Assert.NotNull(options);
-    Assert.Equal("Server=localhost;Database=axis;User Id=postgre;Password=1q2w3e4r5t", options.ConnectionString);
+    Assert.Equal("Server=localhost;Database=axis;User Id=axis;Password=1q2w3e4r5t", options.ConnectionString);
   }
 
 }
