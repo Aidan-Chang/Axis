@@ -98,6 +98,7 @@ StyleCopReport.xml
 *.svclog
 *.scc
 **/Resources/*.onnx
+**/Models/*.onnx
 **/contents/plugins/**/*.dll
 **/Podfile.lock
 **/package-lock.json
