@@ -73,7 +73,7 @@ public static class PluginExtension {
         };
         return loader;
       });
-      // save to local file
+      // save to entry to storage
       _list.Save();
     });
     return builder;

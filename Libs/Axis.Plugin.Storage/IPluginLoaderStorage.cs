@@ -6,4 +6,6 @@ public interface IPluginLoaderStorage {
 
   public Dictionary<string, PluginEntry> Load();
 
+  public PluginEntry Get(string key);
+
 }

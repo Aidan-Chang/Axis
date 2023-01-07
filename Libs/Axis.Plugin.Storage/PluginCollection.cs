@@ -1,5 +1,4 @@
 ﻿using Axis.Plugin.Abstractin;
-using Microsoft.Extensions.Options;
 using System.Diagnostics;
 
 namespace Axis.Plugin.Storage;

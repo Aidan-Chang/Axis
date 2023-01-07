@@ -31,4 +31,8 @@ public class PluginLoaderFileStorage : IPluginLoaderStorage {
     return JsonSerializer.Deserialize<Dictionary<string, PluginEntry>>(text) ?? new Dictionary<string, PluginEntry>();
   }
 
+  public PluginEntry Get(string key) {
+    throw new NotImplementedException();
+  }
+
 }
