@@ -20,7 +20,7 @@ public class ModelCompressTest {
       string path = Path.Combine("Models", name + ".onnx");
       using (FileStream input = File.OpenRead(path))
       using (ChunkFileStream output = new ChunkFileStream(name, size))
-      using (GZipStream gz = new(output, CompressionLevel.SmallestSize)) {
+      using (GZipStream gz = new(output, CompressionLevel.Optimal)) {
         // buffer size 8KB
         byte[] buffer = new byte[2 << 15];
         // source file reading
@@ -45,8 +45,13 @@ public class ModelCompressTest {
       using (FileStream output = File.Create(name + ".bak"))
       using (ChunkFileStream input = new ChunkFileStream(name))
       using (GZipStream gz = new(input, CompressionMode.Decompress)) {
-        // decompress and write to output file stream
-        gz.CopyTo(output);
+        // buffer size 8KB
+        byte[] buffer = new byte[2 << 15];
+        // target file writing
+        while (gz.Read(buffer, 0, buffer.Length) != 0) {
+          // decompress and write to target file stream
+          output.Write(buffer, 0, buffer.Length);
+        }
       }
     }
   }
@@ -57,13 +62,13 @@ public class ChunkFileStream : Stream {
 
   public override bool CanRead => true;
 
-  public override bool CanSeek => throw new NotImplementedException();
+  public override bool CanSeek => throw new NotSupportedException();
 
   public override bool CanWrite => true;
 
-  public override long Length => throw new NotImplementedException();
+  public override long Length => throw new NotSupportedException();
 
-  public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+  public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 
   public string Path { get; }
 
@@ -80,7 +85,7 @@ public class ChunkFileStream : Stream {
     Index = 1;
     // create new or remove exists chunk files
     directory = new DirectoryInfo(path);
-    if (directory.Exists) directory.GetFiles("*.chk").ToList().ForEach(file => file.Delete());
+    if (directory.Exists) directory.GetFiles().ToList().ForEach(file => file.Delete());
     else directory.Create();
   }
 
@@ -126,15 +131,15 @@ public class ChunkFileStream : Stream {
   }
 
   public override void Flush() {
-    throw new NotImplementedException();
+    throw new NotSupportedException();
   }
 
   public override long Seek(long offset, SeekOrigin origin) {
-    throw new NotImplementedException();
+    throw new NotSupportedException();
   }
 
   public override void SetLength(long value) {
-    throw new NotImplementedException();
+    throw new NotSupportedException();
   }
 
 }
