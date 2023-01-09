@@ -1,7 +1,4 @@
-﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
-using System.IO.Compression;
-using System.Reflection.Metadata;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System.IO.Compression;
 
 namespace Axis.Ml.Test;
 
@@ -16,44 +13,20 @@ public class ModelCompressTest {
       "landmarks_68_pfld",
       "recognition_resnet27",
     };
+    // chunk file size is 8MB
+    const int size = 2 << 22;
+    // split files to chunk
     foreach (var name in names) {
       string path = Path.Combine("Models", name + ".onnx");
       using (FileStream input = File.OpenRead(path))
-      using (MemoryStream memory = new MemoryStream())
-      using (GZipStream gz = new(memory, CompressionLevel.SmallestSize)) {
-        // create/remove exists split files
-        DirectoryInfo dir = new DirectoryInfo(name);
-        if (dir.Exists) dir.GetFiles("*.spt").ToList().ForEach(file => file.Delete());
-        else dir.Create();
-        // chunk file size is 8MB
-        int size = 2 << 22;
+      using (ChunkFileStream output = new ChunkFileStream(name, size))
+      using (GZipStream gz = new(output, CompressionLevel.SmallestSize)) {
         // buffer size 8KB
         byte[] buffer = new byte[2 << 15];
-        int index = 1;
         // source file reading
-        while (input.Position < input.Length) {
-          using (FileStream output = File.OpenWrite(Path.Combine(dir.FullName, index.ToString("D4") + ".spt"))) {
-            int remaining = size;
-            int length = 0;
-            byte[] compress_buffer = new byte[2 << 15];
-            // compress bytes to memory
-            var compress = () => {
-              int source_read_length = input.Read(buffer, 0, buffer.Length);
-              if (source_read_length > 0) {
-                memory.Position = 0;
-                gz.Write(buffer, 0, buffer.Length);
-                compress_buffer = memory.ToArray();
-                return compress_buffer.Length;
-              }
-              return 0;
-            };
-            // write to chunk
-            while (remaining > 0 && (length = compress()) > 0) {
-              output.Write(compress_buffer, 0, compress_buffer.Length);
-              remaining -= length;
-            }
-            index++;
-          }
+        while (input.Read(buffer, 0, buffer.Length) > 0) {
+          // compress and write to chunk stream
+          gz.Write(buffer, 0, buffer.Length);
         }
       }
     }
@@ -69,36 +42,99 @@ public class ModelCompressTest {
       "recognition_resnet27",
     };
     foreach (var name in names) {
-      DirectoryInfo dir = new DirectoryInfo(name);
-      if (dir.Exists == false) continue;
-      FileInfo[] files = dir.GetFiles("*.spt").OrderBy(x => x.Name).ToArray();
-      if (files.Length > 0) {
-        using (FileStream output = File.Create(name + ".onnx"))
-        using(MemoryStream memory = new MemoryStream())
-        using (GZipStream gz = new(memory, CompressionMode.Decompress)) {
-          // buffer size 8KB
-          byte[] buffer = new byte[2 << 15];
-          // source chunks files reading
-          foreach (var file in files) {
-            using (FileStream input = File.OpenRead(file.FullName)) {
-              int length = 0;
-              while ((length = input.Read(buffer, 0, buffer.Length)) > 0) {
-                // read to memory
-                memory.Position = 0;
-                memory.SetLength(0);
-                memory.Write(buffer, 0, buffer.Length);
-                memory.Position = 0;
-                byte[] compress_buffer = new byte[2 << 15];
-                // decompress bytes to memory
-                int decompress_length = 0;
-                while ((decompress_length = gz.Read(compress_buffer, 0, compress_buffer.Length)) > 0) {
-                  output.Write(compress_buffer, 0, compress_buffer.Length);
-                }
-              }
-            }
-          }
-        }
+      using (FileStream output = File.Create(name + ".bak"))
+      using (ChunkFileStream input = new ChunkFileStream(name))
+      using (GZipStream gz = new(input, CompressionMode.Decompress)) {
+        // decompress and write to output file stream
+        gz.CopyTo(output);
       }
     }
   }
+
+}
+
+public class ChunkFileStream : Stream {
+
+  public override bool CanRead => true;
+
+  public override bool CanSeek => throw new NotImplementedException();
+
+  public override bool CanWrite => true;
+
+  public override long Length => throw new NotImplementedException();
+
+  public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+  public string Path { get; }
+
+  public int Size { get; }
+
+  public int Index { get; private set; }
+
+  public FileStream? Current { get; private set; }
+
+  private DirectoryInfo directory;
+  public ChunkFileStream(string path, int size = 0) {
+    Path = path;
+    Size = size;
+    Index = 1;
+    // create new or remove exists chunk files
+    directory = new DirectoryInfo(path);
+    if (directory.Exists) directory.GetFiles("*.chk").ToList().ForEach(file => file.Delete());
+    else directory.Create();
+  }
+
+  public override int Read(byte[] buffer, int offset, int count) {
+    string chunk_file_name = System.IO.Path.Combine(Path, directory.Name + "." + Index.ToString("D3"));
+    if (File.Exists(chunk_file_name) == false) {
+      return 0;
+    }
+    if (Current == null) {
+      Current = File.OpenRead(chunk_file_name);
+    }
+    int size = Current.Read(buffer, 0, buffer.Length);
+    if (size == 0) {
+      Index++;
+      return -1;
+    }
+    return size;
+  }
+
+  private int file_remaining = 0;
+  public override void Write(byte[] buffer, int offset, int count) {
+    if (Size < (2 << 19)) {
+      throw new InvalidOperationException("Chunk size have to greater than 1MB");
+    }
+    if (Current == null) {
+      Current = File.Create(System.IO.Path.Combine(Path, directory.Name + "." + Index.ToString("D3")));
+      file_remaining = Size;
+    }
+    int buffer_remaining = buffer.Length;
+    while (buffer_remaining > 0) {
+      if (file_remaining <= 0) {
+        Index++;
+        Current = File.Create(System.IO.Path.Combine(Path, directory.Name + "." + Index.ToString("D3")));
+        file_remaining = Size;
+      }
+      int size = Math.Min(file_remaining, buffer_remaining);
+      byte[] content = new byte[size];
+      Array.Copy(buffer, buffer.Length - buffer_remaining, content, 0, size);
+      Current.Write(content, 0, content.Length);
+      buffer_remaining -= content.Length;
+      file_remaining -= content.Length;
+    }
+  }
+
+  public override void Flush() {
+    throw new NotImplementedException();
+  }
+
+  public override long Seek(long offset, SeekOrigin origin) {
+    throw new NotImplementedException();
+  }
+
+  public override void SetLength(long value) {
+    throw new NotImplementedException();
+  }
+
 }
