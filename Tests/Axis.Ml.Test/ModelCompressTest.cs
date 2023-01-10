@@ -7,9 +7,9 @@ public class ModelCompressTest {
   [Fact]
   public void Model_File_Archieve() {
     string[] names = {
+      "face_detector_640",
       "arcfaceresnet100-8",
       "depth_googlenet_slim",
-      "face_detector_640",
       "landmarks_68_pfld",
       "recognition_resnet27",
     };
@@ -19,15 +19,10 @@ public class ModelCompressTest {
     foreach (var name in names) {
       string path = Path.Combine("Models", name + ".onnx");
       using (FileStream input = File.OpenRead(path))
-      using (ChunkFileStream output = new ChunkFileStream(name, size))
-      using (GZipStream gz = new(output, CompressionLevel.Optimal)) {
-        // buffer size 8KB
-        byte[] buffer = new byte[2 << 15];
-        // source file reading
-        while (input.Read(buffer, 0, buffer.Length) > 0) {
-          // compress and write to chunk stream
-          gz.Write(buffer, 0, buffer.Length);
-        }
+      using (ChunkFileStream output = new ChunkFileStream(name, ChunkMode.Split, size))
+      //using (FileStream output = File.Create(Path.Combine(name, name + ".gz")))
+      using (GZipStream gz = new(output, CompressionMode.Compress, false)) {
+        input.CopyTo(gz);
       }
     }
   }
@@ -35,30 +30,31 @@ public class ModelCompressTest {
   [Fact]
   public void Model_File_Load_From_Archieve() {
     string[] names = {
+      "face_detector_640",
       "arcfaceresnet100-8",
       "depth_googlenet_slim",
-      "face_detector_640",
       "landmarks_68_pfld",
       "recognition_resnet27",
     };
     foreach (var name in names) {
       using (FileStream output = File.Create(name + ".bak"))
-      using (ChunkFileStream input = new ChunkFileStream(name))
-      using (GZipStream gz = new(input, CompressionMode.Decompress)) {
-        // buffer size 8KB
-        byte[] buffer = new byte[2 << 15];
-        // target file writing
-        while (gz.Read(buffer, 0, buffer.Length) != 0) {
-          // decompress and write to target file stream
-          output.Write(buffer, 0, buffer.Length);
-        }
+      using (ChunkFileStream input = new ChunkFileStream(name, ChunkMode.Merge))
+      using (GZipStream gz = new(input, CompressionMode.Decompress, false)) {
+        gz.CopyTo(output);
       }
     }
   }
 
 }
 
+public enum ChunkMode {
+  Split,
+  Merge,
+}
+
 public class ChunkFileStream : Stream {
+
+  #region Base Parameters
 
   public override bool CanRead => true;
 
@@ -70,6 +66,8 @@ public class ChunkFileStream : Stream {
 
   public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 
+  #endregion Base Parameters
+
   public string Path { get; }
 
   public int Size { get; }
@@ -79,14 +77,25 @@ public class ChunkFileStream : Stream {
   public FileStream? Current { get; private set; }
 
   private DirectoryInfo directory;
-  public ChunkFileStream(string path, int size = 0) {
+
+  public ChunkFileStream(string path, ChunkMode mode, int size = 0) {
     Path = path;
     Size = size;
     Index = 1;
-    // create new or remove exists chunk files
     directory = new DirectoryInfo(path);
-    if (directory.Exists) directory.GetFiles().ToList().ForEach(file => file.Delete());
-    else directory.Create();
+    switch (mode) {
+      case ChunkMode.Split:
+        if (size < (2 << 19)) {
+          throw new ArgumentException("Size could not be grater then 1MB in split mode");
+        }
+        // create new or remove exists chunk files
+        if (directory.Exists) directory.GetFiles().ToList().ForEach(file => file.Delete());
+        else directory.Create();
+        break;
+      case ChunkMode.Merge:
+      default:
+        break;
+    }
   }
 
   public override int Read(byte[] buffer, int offset, int count) {
@@ -97,9 +106,16 @@ public class ChunkFileStream : Stream {
     if (Current == null) {
       Current = File.OpenRead(chunk_file_name);
     }
-    int size = Current.Read(buffer, 0, buffer.Length);
+    int size = Current.Read(buffer, 0, count);
     if (size == 0) {
+      Current.Close();
       Index++;
+      chunk_file_name = System.IO.Path.Combine(Path, directory.Name + "." + Index.ToString("D3"));
+      // without next chunk file
+      if (File.Exists(chunk_file_name) == false) {
+        return 0;
+      }
+      Current = File.OpenRead(chunk_file_name);
       return -1;
     }
     return size;
@@ -107,28 +123,35 @@ public class ChunkFileStream : Stream {
 
   private int file_remaining = 0;
   public override void Write(byte[] buffer, int offset, int count) {
-    if (Size < (2 << 19)) {
-      throw new InvalidOperationException("Chunk size have to greater than 1MB");
-    }
     if (Current == null) {
       Current = File.Create(System.IO.Path.Combine(Path, directory.Name + "." + Index.ToString("D3")));
       file_remaining = Size;
     }
-    int buffer_remaining = buffer.Length;
+    int buffer_remaining = count;
     while (buffer_remaining > 0) {
       if (file_remaining <= 0) {
         Index++;
+        Current.Close();
         Current = File.Create(System.IO.Path.Combine(Path, directory.Name + "." + Index.ToString("D3")));
         file_remaining = Size;
       }
       int size = Math.Min(file_remaining, buffer_remaining);
       byte[] content = new byte[size];
-      Array.Copy(buffer, buffer.Length - buffer_remaining, content, 0, size);
+      Array.Copy(buffer, count - buffer_remaining, content, 0, size);
       Current.Write(content, 0, content.Length);
       buffer_remaining -= content.Length;
       file_remaining -= content.Length;
     }
   }
+
+  public override void Close() {
+    if (Current != null) {
+      Current.Close();
+    }
+    base.Close();
+  }
+
+  #region Base Method
 
   public override void Flush() {
     throw new NotSupportedException();
@@ -141,5 +164,7 @@ public class ChunkFileStream : Stream {
   public override void SetLength(long value) {
     throw new NotSupportedException();
   }
+
+  #endregion Base Method
 
 }
