@@ -26,6 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Libs\Axis.Data.IO.File\Axis.Data.IO.File.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Models\arcfaceresnet100-8.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
