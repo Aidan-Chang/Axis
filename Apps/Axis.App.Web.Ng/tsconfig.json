@@ -27,6 +27,9 @@
       "equipment": [
         "dist/equipment"
       ],
+      "meal": [
+        "dist/meal"
+      ],
       "message": [
         "dist/message"
       ],

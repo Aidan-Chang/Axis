@@ -32,6 +32,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Lib.Plugin", "Libs\Axi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{612D2DB3-A5AC-4AF2-942F-E72B70FEA720}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Project.Meal", "Projects\Axis.Project.Meal\Axis.Project.Meal.csproj", "{868036E8-5C80-49DA-B761-49E4985EB3AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{8EC1D3A7-2407-40AB-BD78-1B10262251A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EC1D3A7-2407-40AB-BD78-1B10262251A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EC1D3A7-2407-40AB-BD78-1B10262251A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{868036E8-5C80-49DA-B761-49E4985EB3AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{868036E8-5C80-49DA-B761-49E4985EB3AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{868036E8-5C80-49DA-B761-49E4985EB3AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{868036E8-5C80-49DA-B761-49E4985EB3AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{CED155E0-8A0E-4372-B17B-93ABADD02CFF} = {652F4CEA-6330-44D3-9A46-CD38C5E0320F}
 		{34834BE3-5D35-4C46-8B0F-B628059D4D5A} = {4308C4C7-00CE-4409-B842-282625D0869F}
 		{8EC1D3A7-2407-40AB-BD78-1B10262251A1} = {71FA50C2-6CF2-437E-989D-F8A6A9B8325A}
+		{868036E8-5C80-49DA-B761-49E4985EB3AB} = {612D2DB3-A5AC-4AF2-942F-E72B70FEA720}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {174D3C36-B7BC-4662-8A82-4E9EB6AABC33}
