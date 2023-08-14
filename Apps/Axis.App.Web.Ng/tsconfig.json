@@ -24,18 +24,12 @@
       "dom"
     ],
     "paths": {
-      "equipment": [
-        "dist/equipment"
+      "@axis/lib/*": [
+        "libs/*/src/public-api.ts"
       ],
-      "meal": [
-        "dist/meal"
+      "@axis/project/*": [
+        "projects/*/src/public-api.ts"
       ],
-      "message": [
-        "dist/message"
-      ],
-      "ux": [
-        "dist/ux"
-      ]
     }
   },
   "angularCompilerOptions": {

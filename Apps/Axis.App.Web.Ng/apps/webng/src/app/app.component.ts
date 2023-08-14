@@ -7,10 +7,15 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterOutlet],
   template: `
-    <router-outlet></router-outlet>
+    <h1>
+      我要訂餐
+    </h1>
+    <div>
+      <router-outlet></router-outlet>
+    </div>
   `,
   styles: [],
 })
 export class AppComponent {
-  title = 'Axis';
+  title = '我要訂餐';
 }
