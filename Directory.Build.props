@@ -1,0 +1,21 @@
+<Project>
+  <PropertyGroup>
+    <Company>Axos.io</Company>
+    <Description>An Application for manufactoring on Axos</Description>
+    <Copyright>Copyright Axos.io 2022</Copyright>
+    <Product>Axos.io</Product>
+    <AssemblyVersion>6.22.6.1</AssemblyVersion>
+    <InformationalVersion>6.22.6.1</InformationalVersion>
+    <FileVersion>6.22.6.1</FileVersion>
+    <EnableCentralPackageVersions>true</EnableCentralPackageVersions>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11"  />
+    <PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
+    <PackageReference Update="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.11" />
+    <PackageReference Update="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.11" />
+    <PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+    <PackageReference Update="Microsoft.Extensions.Identity.Core" Version="6.0.11" />
+    <PackageReference Update="Microsoft.Extensions.Identity.Stores" Version="6.0.11" />
+  </ItemGroup>
+</Project>
